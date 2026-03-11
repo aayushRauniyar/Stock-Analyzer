@@ -1,0 +1,21 @@
+2026-03-11 20:57:22  [MODULE-1]  INFO  ========================================================
+2026-03-11 20:57:22  [MODULE-1]  INFO  ========================================================
+2026-03-11 20:57:22  [MODULE-1]  INFO    Watching:  SPY, QQQ, VTI
+2026-03-11 20:57:22  [MODULE-1]  INFO    Interval:  Every 60 minutes (market hours only)
+2026-03-11 20:57:22  [MODULE-1]  INFO    Timezone:  Adelaide (ACST/ACDT)
+2026-03-11 20:57:22  [MODULE-1]  INFO  ========================================================
+2026-03-11 21:06:01  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-11 21:06:01  [MODULE-1]  INFO  📥 Fetching 90d history for SPY...
+2026-03-11 21:06:03  [MODULE-1]  INFO  ✅ SPY: 90 rows fetched (2025-10-29 → 2026-03-10)
+2026-03-11 21:06:03  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-11 21:06:03  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $677.18 | RSI: 43.42 | Signal: BEARISH
+2026-03-11 21:08:23  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-11 21:08:23  [MODULE-1]  INFO  📥 Fetching 90d history for SPY...
+2026-03-11 21:08:26  [MODULE-1]  INFO  ✅ SPY: 90 rows fetched (2025-10-29 → 2026-03-10)
+2026-03-11 21:08:26  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-11 21:08:26  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $677.18 | RSI: 43.42 | Signal: BEARISH
+2026-03-11 21:31:17  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-11 21:31:17  [MODULE-1]  INFO  📥 Fetching 90d history for SPY...
+2026-03-11 21:31:18  [MODULE-1]  INFO  ✅ SPY: 90 rows fetched (2025-10-29 → 2026-03-10)
+2026-03-11 21:31:18  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-11 21:31:19  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $677.18 | RSI: 43.42 | Signal: BEARISH

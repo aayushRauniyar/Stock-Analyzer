@@ -1,0 +1,11 @@
+# Mirai ArcSphere — Module 1 Dependencies
+# Install with: pip install -r requirements_module1.txt
+
+yfinance>=0.2.38
+ta>=0.11.0
+pandas>=2.0.0
+numpy>=1.24.0,<2.0.0
+schedule>=1.2.0
+pytz>=2024.1
+alpaca-trade-api>=3.0.2
+pyarrow>=16.0.0
