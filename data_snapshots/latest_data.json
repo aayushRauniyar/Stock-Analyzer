@@ -1,11 +1,11 @@
 {
-  "fetched_at": "2026-03-11 20:57:29",
-  "fetched_at_aest": "2026-03-11 20:57 ACDT",
+  "fetched_at": "2026-03-11 22:24:19",
+  "fetched_at_aest": "2026-03-11 22:24 ACDT",
   "market_open": false,
   "data": {
     "SPY": {
       "ticker": "SPY",
-      "timestamp": "2026-03-11 20:57:25",
+      "timestamp": "2026-03-11 22:24:16",
       "price": 677.18,
       "prev_close": 678.27,
       "daily_change_pct": -0.161,
@@ -37,7 +37,7 @@
     },
     "QQQ": {
       "ticker": "QQQ",
-      "timestamp": "2026-03-11 20:57:27",
+      "timestamp": "2026-03-11 22:24:17",
       "price": 607.77,
       "prev_close": 607.76,
       "daily_change_pct": 0.002,
@@ -69,7 +69,7 @@
     },
     "VTI": {
       "ticker": "VTI",
-      "timestamp": "2026-03-11 20:57:29",
+      "timestamp": "2026-03-11 22:24:18",
       "price": 333.51,
       "prev_close": 334.28,
       "daily_change_pct": -0.23,

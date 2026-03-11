@@ -1,0 +1,59 @@
+{
+  "cached_at": "2026-03-11 22:24:23",
+  "signals": {
+    "SPY": {
+      "ticker": "SPY",
+      "signal": "SELL",
+      "conf": 58,
+      "risk": "MEDIUM",
+      "entry": 675.83,
+      "exit": 697.5,
+      "stop": 656.86,
+      "tf": "MEDIUM",
+      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 43.42.",
+      "risks": [
+        "No AI analysis available",
+        "Based on indicators only"
+      ],
+      "analysed_at": "2026-03-11 22:24:23",
+      "price_at_analysis": 677.18,
+      "is_placeholder": true
+    },
+    "QQQ": {
+      "ticker": "QQQ",
+      "signal": "BUY",
+      "conf": 62,
+      "risk": "MEDIUM",
+      "entry": 606.55,
+      "exit": 626.0,
+      "stop": 589.54,
+      "tf": "MEDIUM",
+      "reason": "Auto-generated from technical indicators. MACD is BULLISH, RSI at 48.85.",
+      "risks": [
+        "No AI analysis available",
+        "Based on indicators only"
+      ],
+      "analysed_at": "2026-03-11 22:24:23",
+      "price_at_analysis": 607.77,
+      "is_placeholder": true
+    },
+    "VTI": {
+      "ticker": "VTI",
+      "signal": "SELL",
+      "conf": 58,
+      "risk": "MEDIUM",
+      "entry": 332.84,
+      "exit": 343.52,
+      "stop": 323.5,
+      "tf": "MEDIUM",
+      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 42.68.",
+      "risks": [
+        "No AI analysis available",
+        "Based on indicators only"
+      ],
+      "analysed_at": "2026-03-11 22:24:23",
+      "price_at_analysis": 333.51,
+      "is_placeholder": true
+    }
+  }
+}

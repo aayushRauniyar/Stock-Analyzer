@@ -1,0 +1,27 @@
+{
+  "name": "stock-analyzer",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">   <img src=\"https://raw.githubusercontent.com/aayushRauniyar/Stock-Analyzer/main/assets/banner.png\" alt=\"Mirai ArcSphere Banner\" width=\"100%\"> </p>",
+  "main": "vite.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aayushRauniyar/Stock-Analyzer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aayushRauniyar/Stock-Analyzer/issues"
+  },
+  "homepage": "https://github.com/aayushRauniyar/Stock-Analyzer#readme",
+  "dependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite": "^4.5.14"
+  },
+  "type": "module"
+}
