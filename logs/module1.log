@@ -64,3 +64,42 @@
 2026-03-11 22:24:24  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
 2026-03-11 22:24:24  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 22:24:24] "POST /api/refresh HTTP/1.1" 200 -
 2026-03-11 22:26:16  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-11 23:06:12  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-11 23:06:12  [MODULE-1]  INFO  📥 Fetching 90d history for SPY...
+2026-03-11 23:06:13  [MODULE-1]  INFO  ✅ SPY: 90 rows fetched (2025-10-29 → 2026-03-10)
+2026-03-11 23:06:13  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-11 23:06:13  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $677.18 | RSI: 43.42 | Signal: BEARISH
+2026-03-11 23:06:26  [MODULE-1]  INFO  [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.104:5000
+2026-03-11 23:06:26  [MODULE-1]  INFO  [33mPress CTRL+C to quit[0m
+2026-03-11 23:10:59  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 23:10:59] "GET /api/market-data?t=1773232859327 HTTP/1.1" 200 -
+2026-03-11 23:10:59  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 23:10:59] "GET /api/market-data?t=1773232859334 HTTP/1.1" 200 -
+2026-03-11 23:10:59  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 23:10:59] "GET /api/stream HTTP/1.1" 200 -
+2026-03-11 23:10:59  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 23:10:59] "GET /api/signals HTTP/1.1" 200 -
+2026-03-11 23:10:59  [MODULE-1]  INFO  127.0.0.1 - - [11/Mar/2026 23:10:59] "GET /api/signals HTTP/1.1" 200 -
+2026-03-11 23:11:26  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-11 23:16:27  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 11:49:59  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 11:55:02  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 12:00:02  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 12:05:03  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 12:10:04  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 12:15:05  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:31:59  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:37:00  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:42:01  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:47:01  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:52:02  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 15:57:03  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:02:04  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:07:05  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:12:06  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:17:06  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:22:07  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:27:08  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:32:09  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:37:10  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:42:10  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-12 16:47:11  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
