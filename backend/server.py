@@ -35,7 +35,10 @@ from flask_cors import CORS
 # Add backend directory to path for module imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from module1_market_data import get_all_etf_data, get_market_data, is_market_open, get_market_schedule
+from module1_market_data import (
+    get_all_etf_data, get_market_data, is_market_open, get_market_schedule,
+    get_sse_events, check_reanalysis_needed
+)
 from module2_ai_analysis import analyse_all, analyse_ticker, get_cached_signals, should_reanalyse
 
 # ─────────────────────────────────────────────
@@ -174,21 +177,39 @@ def api_market_status():
 
 @app.route("/api/stream", methods=["GET"])
 def api_stream():
-    """Server-Sent Events endpoint for real-time updates."""
+    """Server-Sent Events endpoint for real-time updates from Module 1 WebSocket."""
     def event_stream():
         q = queue.Queue(maxsize=50)
         with sse_lock:
             sse_subscribers.append(q)
+        
         try:
             # Send initial heartbeat
             yield f"event: connected\ndata: {json.dumps({'status': 'connected', 'time': datetime.now().isoformat()})}\n\n"
 
             while True:
+                # Check Module 1's SSE queue for price updates
+                module1_events = get_sse_events(timeout=1.0)
+                for evt in module1_events:
+                    # Check if re-analysis is needed
+                    if evt.get("should_reanalyse"):
+                        ticker = evt.get("ticker")
+                        market_data = get_market_data(ticker)
+                        signals = analyse_ticker(market_data)
+                        evt["signal"] = signals  # Attach AI signal to event
+                    
+                    # Broadcast to client
+                    try:
+                        q.put_nowait(f"event: update\ndata: {json.dumps(evt, default=str)}\n\n")
+                    except queue.Full:
+                        pass
+                
+                # Also check for messages from /api/refresh
                 try:
-                    message = q.get(timeout=30)  # 30s heartbeat
+                    message = q.get(timeout=1.0)
                     yield message
                 except queue.Empty:
-                    # Send heartbeat to keep connection alive
+                    # Send periodic heartbeat
                     yield f"event: heartbeat\ndata: {json.dumps({'time': datetime.now().isoformat()})}\n\n"
         except GeneratorExit:
             with sse_lock:
