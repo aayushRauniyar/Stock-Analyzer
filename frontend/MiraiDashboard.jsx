@@ -832,7 +832,7 @@ export default function App() {
               <div style={{ display:"flex", justifyContent:"space-between",
                 alignItems:"flex-end", marginBottom:20 }}>
                 <SectionTitle jp="Module 2 · AI分析エンジン" en="AI Signal Analysis"
-                  sub="Claude · Anthropic" T={T} />
+                  sub="Groq · Llama 3 (LPU)" T={T} />
                 <div style={{ display:"flex", gap:6, marginBottom:20 }}>
                   {["SPY","QQQ","VTI"].map(t=>(
                     <button key={t} onClick={()=>setSelTicker(t)} style={{
@@ -868,7 +868,7 @@ export default function App() {
                             <div style={{ fontFamily:"'Noto Serif JP',serif",
                               fontSize:10, color:T.textMuted, marginTop:3,
                               letterSpacing:"0.1em" }}>
-                              Claude Analysis · 脳
+                              Groq LPU Analysis · 脳
                             </div>
                           </div>
                           <div style={{ textAlign:"right" }}>
@@ -971,7 +971,7 @@ export default function App() {
                       color:T.textMuted, marginBottom:12 }}>
                       Run Fresh Analysis
                     </div>
-                    <button onClick={()=>fetchSignal(selTicker,etf[selTicker])}
+                    <button onClick={()=>refreshAll()}
                       disabled={loading[`s_${selTicker}`]}
                       className="hvr"
                       style={{ width:"100%", padding:"11px",
@@ -983,15 +983,15 @@ export default function App() {
                         borderRadius:8, cursor:loading[`s_${selTicker}`]?"wait":"pointer",
                         transition:"all 0.2s" }}>
                       {loading[`s_${selTicker}`]
-                        ? "🌸 Claude is analysing..."
+                        ? "⚡ Groq is thinking..."
                         : `🤖 Re-Analyse ${selTicker}`}
                     </button>
                     <div style={{ marginTop:10, fontSize:11, color:T.textMuted,
                       lineHeight:1.7, borderTop:`1px solid ${T.border}30`,
                       paddingTop:10 }}>
-                      Sends Module 1 market data to Claude AI. Returns a
-                      structured signal with entry/exit levels and risk assessment.
-                      Signals below 70% confidence are skipped by Module 3.
+                      Sends Module 1 market data to Groq LPU API. Returns an
+                      ultra-fast signal with entry/exit levels and risk assessment.
+                      Llama 3 powered inference.
                     </div>
                   </div>
 
@@ -1246,11 +1246,11 @@ export default function App() {
                     feats:["fetch_raw_data()","calculate_indicators()","is_market_open()","get_market_schedule() → Adelaide","run_data_scheduler() auto loop","JSON snapshot output"],
                     done:[1,1,1,1,1,1] },
                   { code:"M2", kanji:"脳", name:"AI Analysis Engine",
-                    nameJp:"AI分析エンジン", status:"planned",
-                    version:"—", color:T.gold,
-                    file:"modules/module2_ai_analysis.py",
-                    feats:["get_ai_insight()","Confidence filter ≥70%","Risk assessment","Entry/exit price levels","JSON signal output","Prompt tuning & validation"],
-                    done:[0,0,0,0,0,0] },
+                    nameJp:"AI分析エンジン", status:"active",
+                    version:"1.0.0", color:T.gold,
+                    file:"backend/module2_ai_analysis.py",
+                    feats:["get_ai_insight()","Confidence filter ≥70%","Risk assessment","Entry/exit price levels","JSON signal output","Groq LPU Acceleration"],
+                    done:[1,1,1,1,1,1] },
                   { code:"M3", kanji:"手", name:"Trade Execution Engine",
                     nameJp:"取引実行エンジン", status:"planned",
                     version:"—", color:T.moss,
