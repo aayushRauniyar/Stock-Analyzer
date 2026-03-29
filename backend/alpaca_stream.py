@@ -3,92 +3,74 @@ import logging
 import asyncio
 import os
 import threading
-from filelock import FileLock
-from alpaca.trading.stream import TradingStream
 import time
+from datetime import datetime
+from alpaca.trading.stream import TradingStream
+from dotenv import load_dotenv
 
-from backend.config import ALPACA_API_KEY, ALPACA_SECRET_KEY
+# Load .env from project root
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
+
+from config import ALPACA_API_KEY, ALPACA_SECRET_KEY
+import db
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("AlpacaStream")
 
-ORDERS_JSON_PATH = os.path.join(os.path.dirname(__file__), "data_snapshots", "orders.json")
-LOCK_PATH = ORDERS_JSON_PATH + ".lock"
-
-def update_orders_json(trade_update):
+def update_db_from_trade_update(trade_update):
     """
-    Update the orders.json file when a trade execution occurs.
-    Locks the file to prevent concurrent write corruption from other modules.
+    Update the SQLite database and broadcast SSE when a trade execution occurs.
     """
     try:
-        lock = FileLock(LOCK_PATH, timeout=5)
-        order_data = {}
-        with lock:
-            orders = []
-            if os.path.exists(ORDERS_JSON_PATH):
-                try:
-                    with open(ORDERS_JSON_PATH, "r") as f:
-                        data = json.load(f)
-                        if isinstance(data, list):
-                            orders = data
-                        elif "orders" in data:
-                            orders = data["orders"]
-                except json.JSONDecodeError:
-                    orders = []
+        order = trade_update.order
+        order_id = str(order.id)
+        status = order.status.value if hasattr(order.status, 'value') else str(order.status)
+        filled_qty = int(order.filled_qty) if order.filled_qty else 0
+        avg_price = float(order.filled_avg_price) if order.filled_avg_price else None
+        
+        logger.info(f"🔄 Syncing Order {order_id} ({order.symbol}) -> Status: {status} | Filled: {filled_qty}")
 
-            # Find and update, or append
-            order_id = trade_update.order.id
-            updated = False
-            
-            # Extract basic dictionary summary
-            order_data = {
-                "id": str(order_id),
-                "symbol": trade_update.order.symbol,
-                "qty": str(trade_update.order.qty),
-                "filled_qty": str(trade_update.order.filled_qty),
-                "type": trade_update.order.order_type.value if hasattr(trade_update.order.order_type, 'value') else str(trade_update.order.order_type),
-                "side": trade_update.order.side.value if hasattr(trade_update.order.side, 'value') else str(trade_update.order.side),
-                "time_in_force": trade_update.order.time_in_force.value if hasattr(trade_update.order.time_in_force, 'value') else str(trade_update.order.time_in_force),
-                "limit_price": str(trade_update.order.limit_price) if trade_update.order.limit_price else None,
-                "stop_price": str(trade_update.order.stop_price) if trade_update.order.stop_price else None,
-                "status": trade_update.order.status.value if hasattr(trade_update.order.status, 'value') else str(trade_update.order.status),
-                "created_at": str(trade_update.order.created_at),
-                "updated_at": str(trade_update.order.updated_at)
-            }
+        # Update SQLite
+        db.update_order_status(order_id, status, filled_qty, avg_price)
+        
+        # If filled, also add to trade log (Tax Log)
+        if status == "filled":
+            db.add_to_trade_log(
+                ticker=order.symbol,
+                action=order.side.value if hasattr(order.side, 'value') else str(order.side),
+                qty=filled_qty,
+                price=avg_price or 0,
+                reason=f"Alpaca {trade_update.event} update"
+            )
 
-            for i, order in enumerate(orders):
-                if order.get("id") == str(order_id):
-                    orders[i] = order_data
-                    updated = True
-                    break
-            
-            if not updated:
-                orders.insert(0, order_data) # Prepend new order
+        # Prepare SSE data for real-time UI updates
+        order_data = {
+            "id": order_id,
+            "symbol": order.symbol,
+            "qty": str(order.qty),
+            "filled_qty": str(filled_qty),
+            "status": status,
+            "event": trade_update.event,
+            "timestamp": datetime.now().isoformat() if 'datetime' in globals() else str(time.time())
+        }
 
-            # Keep only last 50 orders
-            orders = orders[:50]
-
-            with open(ORDERS_JSON_PATH, "w") as f:
-                json.dump(orders, f, indent=4)
-                
-            logger.info(f"Updated orders.json with status {order_data['status']} for {order_data['symbol']}")
-
-        # Broadcast SSE via local import to prevent circular dependency
+        # Broadcast SSE via utils to prevent circular dependency
+        from sse_utils import broadcast_sse
         try:
-            from backend.server import broadcast_sse
             broadcast_sse("order_update", order_data)
         except Exception as e:
-            logger.error(f"Could not broadcast SSE: {e}")
+            # Server might not be running or import fails in some contexts
+            logger.error(f"⚠ SSE broadcast failed: {e}")
 
     except Exception as e:
-        logger.error(f"Failed to update orders.json: {e}")
+        logger.error(f"Failed to update database from trade update: {e}")
 
 async def trade_update_handler(data):
     """
     Callback fired by Alpaca when an order fills, cancels, etc.
     """
     logger.info(f"Trade update received: {data.event}")
-    update_orders_json(data)
+    update_db_from_trade_update(data)
 
 def run_stream():
     """
@@ -97,8 +79,8 @@ def run_stream():
     logger.info("Starting Alpaca Trading Stream...")
     try:
         stream = TradingStream(
-            ALPACA_API_KEY,
-            ALPACA_SECRET_KEY,
+            api_key=ALPACA_API_KEY,
+            secret_key=ALPACA_SECRET_KEY,
             paper=True
         )
         stream.subscribe_trade_updates(trade_update_handler)

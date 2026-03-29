@@ -41,6 +41,7 @@ from module3_trade_execution import (
     is_auto_trading_enabled, toggle_auto_trading
 )
 from config import RiskLimits
+import db
 
 # ─────────────────────────────────────────────
 # LOGGING SETUP
@@ -107,7 +108,8 @@ def get_current_signals() -> dict:
         # Fall back to fresh analysis
         log.info("📊 Cached signals unavailable, running fresh analysis...")
         fresh_signals = {}
-        for ticker in WATCHLIST:
+        watchlist = db.get_watchlist()
+        for ticker in watchlist:
             data = get_market_data(ticker)
             signal = analyse_ticker(data)
             fresh_signals[ticker] = signal
@@ -359,7 +361,7 @@ def get_orchestrator_status() -> dict:
     return {
         "running": orchestrator_running,
         "auto_trading_enabled": is_auto_trading_enabled(),
-        "monitored_tickers": WATCHLIST,
+        "monitored_tickers": db.get_watchlist(),
         "min_confidence": MIN_SIGNAL_CONFIDENCE,
         "last_signals": last_signals,
         "orchestrated_trades": orchestrated_trades,

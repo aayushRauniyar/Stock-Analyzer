@@ -32,12 +32,14 @@ import sys
 import json
 import logging
 from datetime import datetime
+from dotenv import load_dotenv
 
 # ─────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 # Groq API key — get yours free at https://console.groq.com/keys
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")

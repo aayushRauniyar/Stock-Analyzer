@@ -1,0 +1,14 @@
+# MIRAI ARCSPHERE · AI SYSTEM RULES
+
+## 1. Zero-Hardcoded-Secrets Policy
+- **NO API KEYS**: Never hardcode API keys, secrets, or credentials directly in any source code, documentation, or test scripts.
+- **DOTENV ONLY**: Use `os.getenv()` or similar environment variable access.
+- **LOAD DOTENV**: Every Python entry point or standalone module MUST call `load_dotenv()` from the project root `.env` file.
+- **GITIGNORE**: Ensure `.env` is always in `.gitignore`. Provide a `.env.example` for any new required variables.
+
+## 2. Minimalist Workspace
+- **NO JUNK**: Delete any diagnostic, temporary, or redundant test scripts once their purpose is served.
+- **NO COMMITTING CACHE**: Always untrack `__pycache__`, `node_modules`, and local logs.
+
+## 3. GSD Coordination
+- **GSD SKILLS**: When using GSD skills, continue to adhere to the secret management policy for all generated plans and implementations.

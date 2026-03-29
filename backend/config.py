@@ -18,16 +18,29 @@ PARAMETERS:
 
 import os
 from datetime import datetime, time
+from dotenv import load_dotenv
+
+# Load .env from project root (two levels up from backend/config.py)
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(_PROJECT_ROOT, ".env"))
 
 # ─────────────────────────────────────────────
 # ALPACA PAPER TRADING CONFIGURATION
 # ─────────────────────────────────────────────
 
-# Paper trading API keys (set via environment variables)
-ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "PKK4HFWNTHQ6EVWNKEAEFSST5A")
-ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "Adrwo9qSgrzuHaPLyjVD551jRz84nRyZXUmQcQkA1sFw")
+# Paper trading API keys — loaded from .env, NO hardcoded fallbacks
+ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "")
+ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "")
 ALPACA_BASE_URL   = os.getenv("ALPACA_BASE_URL",   "https://paper-api.alpaca.markets")
-ALPACA_API_URL    = "https://paper-api.alpaca.markets/v2"
+
+# ── AUTO-SET STANDARD ALPACA ENVIRONMENT VARIABLES ──
+# This ensures that any Alpaca SDK (trade-api or alpaca-py)
+# will find the keys automatically even if not passed as args.
+os.environ["APCA_API_KEY_ID"]     = ALPACA_API_KEY
+os.environ["APCA_API_SECRET_KEY"] = ALPACA_SECRET_KEY
+os.environ["APCA_API_BASE_URL"]   = ALPACA_BASE_URL
+
+ALPACA_API_URL    = f"{ALPACA_BASE_URL}/v2"
 
 # ─────────────────────────────────────────────
 # RISK MANAGEMENT CONFIGURATION

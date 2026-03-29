@@ -1,18 +1,60 @@
-# Node dependencies
-node_modules/
+# ─────────────────────────────────────────────
+# SECRETS & ENVIRONMENT
+# ─────────────────────────────────────────────
+.env
+.env.*
+*.env
+!.env.example
 
-# Python cache / env
+# ─────────────────────────────────────────────
+# PYTHON
+# ─────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
 .venv/
+.venv-*/
 venv/
-env/
-.env
+*.egg-info/
+dist/
+build/
 
-# MacOS
+# ─────────────────────────────────────────────
+# NODE / FRONTEND
+# ─────────────────────────────────────────────
+node_modules/
+package-lock.json
+.vite/
+
+# ─────────────────────────────────────────────
+# DATA & LOGS (runtime artifacts, not source)
+# ─────────────────────────────────────────────
+logs/
+data_snapshots/
+backend/data_snapshots/
+*.log
+
+# ─────────────────────────────────────────────
+# GSD PLANNING (optional — keep if you want planning history)
+# ─────────────────────────────────────────────
+# .planning/
+
+# ─────────────────────────────────────────────
+# IDE & OS
+# ─────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 .DS_Store
+Thumbs.db
+desktop.ini
 
-# Data files (optional depending on if you want to track them)
-# backend/data_snapshots/
-# backend/logs/
+# ─────────────────────────────────────────────
+# MISC ARTIFACTS & OLD GUIDES
+# ─────────────────────────────────────────────
+implementation_plan.md
+task.md
+test_module1.bat

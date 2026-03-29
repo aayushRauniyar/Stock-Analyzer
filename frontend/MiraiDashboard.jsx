@@ -26,35 +26,8 @@ const C = {
   textFaint:"#3A3A3A",
 };
 
-// ── SEED DATA ─────────────────────────────────────────────────────────────────
-const SEED_MARKET = {
-  SPY: { ticker:"SPY", name:"S&P 500 ETF TRUST",  price:531.24, prev:528.60, chg:0.50,  rsi:56.2, macd:"BULLISH", bb:"NEUTRAL", sma20:"ABOVE", sma50:"ABOVE", hi52:545.32, lo52:492.10, vol:68420000 },
-  QQQ: { ticker:"QQQ", name:"NASDAQ 100 ETF",    price:451.88, prev:453.10, chg:-0.27, rsi:48.7, macd:"BEARISH", bb:"NEUTRAL", sma20:"BELOW", sma50:"ABOVE", hi52:503.52, lo52:390.20, vol:42100000 },
-  VTI: { ticker:"VTI", name:"TOTAL STOCK MARKET",price:271.45, prev:270.20, chg:0.46,  rsi:53.1, macd:"BULLISH", bb:"NEUTRAL", sma20:"ABOVE", sma50:"ABOVE", hi52:285.50, lo52:218.30, vol:3820000  },
-};
-const SEED_SIG = {
-  SPY: { signal:"BUY",  conf:74, risk:"MEDIUM", entry:531.00, exit:545.00, stop:518.00, tf:"MEDIUM TERM", reason:"SMA 20 crossing above SMA 50 with bullish MACD crossover. Volume confirms upward momentum." },
-  QQQ: { signal:"HOLD", conf:58, risk:"MEDIUM", entry:null,   exit:null,   stop:440.00, tf:"SHORT TERM",  reason:"MACD trending bearish below signal line. Price sits below SMA 20 — wait for confirmation." },
-  VTI: { signal:"BUY",  conf:68, risk:"LOW",    entry:271.00, exit:282.00, stop:263.00, tf:"LONG TERM",   reason:"Broad market showing steady uptrend with neutral RSI — room to run." },
-};
-const POSITIONS = [
-  { sym:"SPY", qty:8,  entry:524.30, curr:531.24 },
-  { sym:"QQQ", qty:5,  entry:448.10, curr:451.88 },
-  { sym:"VTI", qty:12, entry:275.80, curr:271.45 },
-];
-const TAX_LOG = [
-  { date:"2025-03-10", t:"SPY", act:"BUY",  qty:8,  px:524.30, tot:4194.40, why:"MACD CROSSOVER · 74% CONF" },
-  { date:"2025-03-08", t:"QQQ", act:"BUY",  qty:5,  px:448.10, tot:2240.50, why:"RSI OVERSOLD BOUNCE · 71% CONF" },
-  { date:"2025-03-06", t:"VTI", act:"BUY",  qty:12, px:275.80, tot:3309.60, why:"BROAD MARKET TREND · 68% CONF" },
-  { date:"2025-03-04", t:"VTI", act:"SELL", qty:6,  px:279.20, tot:1675.20, why:"STOP-LOSS TRIGGERED -3.1%" },
-  { date:"2025-02-28", t:"SPY", act:"SELL", qty:4,  px:518.40, tot:2073.60, why:"EXIT TARGET REACHED · 72% CONF" },
-];
-const RECS = [
-  { t:"NVDA", reason:"BULLISH MOMENTUM", conf:92, act:"BUY",  risk:"MEDIUM", p:892.45 },
-  { t:"AAPL", reason:"SECTOR BREAKOUT",  conf:88, act:"BUY",  risk:"LOW",    p:189.30 },
-  { t:"MSFT", reason:"RELATIVE STRENGTH",conf:85, act:"HOLD", risk:"LOW",    p:420.10 },
-  { t:"AMD",  reason:"AI CATALYST",      conf:79, act:"BUY",  risk:"HIGH",   p:192.50 },
-];
+// ── MODERN DATA BINDING ───────────────────────────────────────────────────────
+const RECS = []; // AI RECOMMENDATIONS EMPTY FOR PRO START
 
 
 // ── NAV PAGES ─────────────────────────────────────────────────────────────────
@@ -244,41 +217,43 @@ function EtfPanel({ d, s, onRefresh, loading }) {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage]                   = useState("overview");
-  const [mkt, setMkt]                     = useState(SEED_MARKET);
-  const [sig, setSig]                     = useState(SEED_SIG);
+  const [mkt, setMkt]                     = useState({});
+  const [sig, setSig]                     = useState({});
+  const [portfolio, setPortfolio]         = useState({ account: {}, positions_count: 0, daily_loss: 0 });
   const [loading, setLoading]             = useState({});
   const [lastUpdate, setLastUpdate]       = useState(null);
   const [mktOpen, setMktOpen]             = useState(false);
   const [streamActive, setStreamActive]   = useState(false);
   const [autoTrade, setAutoTrade]         = useState(false);
   const [autoStatus, setAutoStatus]       = useState("DISABLED");
-  const [positions, setPositions]         = useState(POSITIONS);
+  const [positions, setPositions]         = useState([]);
   const [watchlist, setWatchlist]         = useState([]);
   const [orders, setOrders]               = useState([]);
   const [newTicker, setNewTicker]         = useState("");
-  const [tradeForm, setTradeForm]         = useState({ ticker:"SPY", side:"BUY", qty:1, auto_size: false });
+  const [tradeForm, setTradeForm]         = useState({ ticker:"", side:"BUY", qty:1, auto_size: false });
   const [tradeMsg, setTradeMsg]           = useState(null);
-  const [taxLog, setTaxLog]               = useState(TAX_LOG);
+  const [taxLog, setTaxLog]               = useState([]);
   const sseRef = useRef(null);
 
-
-  // Derived portfolio
-  const totalValue = positions.reduce((s,p) => s + p.qty * p.curr, 0);
-  const totalPnL   = positions.reduce((s,p) => s + p.qty * (p.curr - p.entry), 0);
-  const cash       = 21495.40;
+  // Derived portfolio from live data
+  const totalValue = portfolio.account?.equity || 0;
+  const totalPnL   = portfolio.account?.unrealized_pl || 0;
+  const cash       = portfolio.account?.cash || 0;
+  const pnlPercent = totalValue > 0 ? (totalPnL / totalValue) * 100 : 0;
   const pnlColor   = totalPnL >= 0 ? C.green : C.red;
 
   // ── Fetch helpers ──────────────────────────────────────────────────────────
   const fetchAll = useCallback(async () => {
     setLoading(l => ({ ...l, ALL:true }));
     try {
-      const [mktRes, sigRes, posRes, wlRes, ordRes, taxRes] = await Promise.all([
+      const [mktRes, sigRes, posRes, wlRes, ordRes, taxRes, portRes] = await Promise.all([
         fetch(`${API_BASE}/market-data?t=${Date.now()}`),
         fetch(`${API_BASE}/signals`),
         fetch(`${API_BASE}/positions`),
         fetch(`${API_BASE}/watchlist`),
         fetch(`${API_BASE}/orders`),
-        fetch(`${API_BASE}/tax-log`)
+        fetch(`${API_BASE}/tax-log`),
+        fetch(`${API_BASE}/portfolio`)
       ]);
       
       if (mktRes.ok) {
@@ -293,7 +268,14 @@ export default function App() {
       }
       if (posRes.ok) {
         const pd = await posRes.json();
-        setPositions(pd.map(p => ({ sym:p.ticker, qty:p.qty, entry:p.entry_price, curr:p.current_price, side:p.side })));
+        const rawPositions = pd.positions || [];
+        setPositions(rawPositions.map(p => ({ 
+          sym: p.ticker, 
+          qty: p.qty, 
+          entry: p.entry_price, 
+          curr: p.current_price, 
+          side: p.side 
+        })));
       }
       if (wlRes.ok) {
         const wd = await wlRes.json();
@@ -305,7 +287,15 @@ export default function App() {
       }
       if (taxRes.ok) {
         const td = await taxRes.json();
-        setTaxLog(td || []);
+        setTaxLog(td.trades || []);
+      }
+      if (portRes.ok) {
+        const pd = await portRes.json();
+        setPortfolio(pd);
+        if (pd.account?.auto_trading_enabled !== undefined) {
+          setAutoTrade(pd.account.auto_trading_enabled);
+          setAutoStatus(pd.account.auto_trading_enabled ? "ENABLED" : "DISABLED");
+        }
       }
     } catch (_) {}
     setLoading(l => ({ ...l, ALL:false }));
@@ -387,17 +377,19 @@ export default function App() {
 
   // ── Auto-trade toggle ──────────────────────────────────────────────────────
   const toggleAutoTrade = async () => {
-    const endpoint = autoTrade ? "/auto-trade/disable" : "/auto-trade/enable";
     try {
-      const res = await fetch(`${API_BASE}${endpoint}`, { method:"POST" });
+      const res = await fetch(`${API_BASE}/auto-trade/enable`, { 
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ enabled: !autoTrade })
+      });
       if (res.ok) {
         const d = await res.json();
-        setAutoTrade(!autoTrade);
-        setAutoStatus(d.status || (autoTrade ? "DISABLED" : "ENABLED"));
+        setAutoTrade(d.auto_trading_enabled);
+        setAutoStatus(d.auto_trading_enabled ? "ENABLED" : "DISABLED");
       }
     } catch (_) {
-      setAutoTrade(a => !a);
-      setAutoStatus(autoTrade ? "DISABLED" : "ENABLED");
+      console.error("Auto-trade toggle failed");
     }
   };
 
@@ -530,7 +522,7 @@ export default function App() {
                 <StatBox label="PORTFOLIO VALUE"  value={`$${totalValue.toLocaleString("en-AU",{minimumFractionDigits:2})}`} />
                 <StatBox label="UNREALISED P&L"
                   value={`${totalPnL>=0?"+":""}$${Math.abs(totalPnL).toFixed(2)}`}
-                  sub={`${totalPnL>=0?"+":""}${((totalPnL/totalValue)*100).toFixed(2)}% TOTAL`}
+                  sub={`${totalPnL>=0?"+":""}${pnlPercent.toFixed(2)}% TOTAL`}
                   subColor={pnlColor} />
                 <StatBox label="CASH AVAILABLE"  value={`$${cash.toLocaleString("en-AU",{minimumFractionDigits:2})}`} sub="ALPACA PAPER ACCOUNT" />
                 <StatBox label="WATCHLIST SIZE"   value={watchlist.length} sub={`${watchlist.slice(0,3).join(", ")}${watchlist.length > 3 ? "..." : ""}`} />
@@ -580,14 +572,14 @@ export default function App() {
                       {taxLog.length === 0 ? (
                         <tr><td colSpan="6" style={{ ...td, textAlign:"center" }}>NO RECENT TRADES</td></tr>
                       ) : (
-                        taxLog.slice(0,5).map((r,i) => (
+                         taxLog.slice(0,5).map((r,i) => (
                           <tr key={i}>
                             <td style={td}>{r.date}</td>
-                            <td style={{ ...td, color:C.orange, fontWeight:600 }}>{r.t}</td>
-                            <td style={{ ...td, color: r.act==="BUY" ? C.green : C.red, fontWeight:600 }}>{r.act}</td>
+                            <td style={{ ...td, color:C.orange, fontWeight:600 }}>{r.ticker}</td>
+                            <td style={{ ...td, color: r.action==="BUY"||r.action==="buy" ? C.green : C.red, fontWeight:600 }}>{r.action}</td>
                             <td style={td}>{r.qty}</td>
-                            <td style={td}>${r.px.toFixed(2)}</td>
-                            <td style={{ ...td, color:C.text, fontWeight:600 }}>${r.tot.toFixed(2)}</td>
+                            <td style={td}>${(r.price || 0).toFixed(2)}</td>
+                            <td style={{ ...td, color:C.text, fontWeight:600 }}>${(r.total || 0).toFixed(2)}</td>
                           </tr>
                         ))
                       )}

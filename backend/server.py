@@ -40,7 +40,12 @@ from module1_market_data import (
     get_sse_events, check_reanalysis_needed, update_global_watchlist
 )
 from module2_ai_analysis import analyse_all, analyse_ticker, get_cached_signals, should_reanalyse
-from config import get_watchlist, save_watchlist
+from module3_trade_execution import get_account_info, get_open_positions, get_daily_loss, place_order, direct_place_order, get_trade_log
+import db
+from config import RiskLimits
+import traceback
+import sse_utils
+import queue
 
 
 # ─────────────────────────────────────────────
@@ -51,7 +56,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_FILE = os.path.join(BASE_DIR, "data_snapshots", "latest_data.json")
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Expanded CORS for more reliable dev sync
+CORS(app, resources={r"/api/*": {"origins": "*", "methods": ["GET", "POST", "OPTIONS"], "allow_headers": "*"}})
+
+# SSE: Thread-safe subscribers imported from utils
+sse_subscribers = sse_utils.sse_subscribers
+sse_lock = sse_utils.sse_lock
 
 # SSE: Thread-safe queue for broadcasting events to all connected clients
 sse_subscribers = []
@@ -84,19 +94,8 @@ def transform_for_dashboard(raw: dict) -> dict:
 # HELPER: SSE broadcast
 # ─────────────────────────────────────────────
 
-def broadcast_sse(event_type: str, data: dict):
-    """Push an event to all connected SSE clients."""
-    message = f"event: {event_type}\ndata: {json.dumps(data, default=str)}\n\n"
-    with sse_lock:
-        dead = []
-        for i, q in enumerate(sse_subscribers):
-            try:
-                q.put_nowait(message)
-            except queue.Full:
-                dead.append(i)
-        # Remove dead subscribers
-        for i in reversed(dead):
-            sse_subscribers.pop(i)
+# SSE broadcast logic moved to sse_utils.py
+broadcast_sse = sse_utils.broadcast_sse
 
 
 # ─────────────────────────────────────────────
@@ -193,6 +192,8 @@ def api_positions():
             "fetched_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         })
     except Exception as e:
+        print(f"❌ ERROR in /api/positions: {e}")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
@@ -201,21 +202,29 @@ def api_portfolio():
     """Return account summary: equity, cash, buying power, P&L."""
     try:
         from module3_trade_execution import get_account_info, get_open_positions, get_daily_loss
-        from config import RiskLimits
         
         account = get_account_info()
         positions = get_open_positions()
         daily_loss = get_daily_loss()
+        
+        # Default account if Alpaca fetch fails
+        if not account or not isinstance(account, dict):
+            account = { "equity": 0, "cash": 0, "buying_power": 0, "unrealized_pl": 0 }
+            
+        equity = account.get("equity") or 0
+        pnl_pct = (daily_loss / equity * 100) if equity > 0 else 0
         
         return jsonify({
             "account": account,
             "positions_count": len(positions),
             "daily_loss": daily_loss,
             "daily_loss_limit": RiskLimits.DAILY_MAX_LOSS_PCT,
-            "daily_loss_pct": (daily_loss / account.get("equity", 1) * 100) if account.get("equity") else 0,
+            "daily_loss_pct": pnl_pct,
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         })
     except Exception as e:
+        print(f"❌ ERROR in /api/portfolio: {e}")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
@@ -246,16 +255,18 @@ def api_tax_log():
             }
         else:
             return jsonify({
-                "trades": trades,
+                "trades": db.get_trade_log(),
                 "count": len(trades),
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             })
     except Exception as e:
+        print(f"❌ ERROR in /api/tax-log: {e}")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/api/toggle-auto-trade", methods=["POST"])
-def api_toggle_auto_trade():
+@app.route("/api/auto-trade/enable", methods=["POST"])
+def api_enable_auto_trade():
     """Toggle auto-trading on/off (user control)."""
     try:
         from module3_trade_execution import toggle_auto_trading, is_auto_trading_enabled
@@ -281,8 +292,8 @@ def api_toggle_auto_trade():
 
 @app.route("/api/watchlist", methods=["GET"])
 def api_get_watchlist():
-    """Return the current favorites watchlist."""
-    return jsonify({"watchlist": get_watchlist()})
+    """Return the current favorites watchlist from SQLite."""
+    return jsonify({"watchlist": db.get_watchlist()})
 
 @app.route("/api/watchlist/add", methods=["POST"])
 def api_add_to_watchlist():
@@ -291,15 +302,14 @@ def api_add_to_watchlist():
     ticker = data.get("ticker", "").upper().strip()
     if not ticker: return jsonify({"error": "No ticker provided"}), 400
     
-    current = get_watchlist()
+    current = db.get_watchlist()
     if ticker not in current:
-        current.append(ticker)
-        save_watchlist(current)
+        db.add_to_watchlist(ticker)
         update_global_watchlist()
         # Trigger a background fetch for the new ticker
         threading.Thread(target=get_market_data, args=(ticker,), daemon=True).start()
     
-    return jsonify({"success": True, "watchlist": current})
+    return jsonify({"success": True, "watchlist": db.get_watchlist()})
 
 @app.route("/api/watchlist/remove", methods=["POST"])
 def api_remove_from_watchlist():
@@ -308,21 +318,19 @@ def api_remove_from_watchlist():
     ticker = data.get("ticker", "").upper().strip()
     if not ticker: return jsonify({"error": "No ticker provided"}), 400
     
-    current = get_watchlist()
+    current = db.get_watchlist()
     if ticker in current:
-        current.remove(ticker)
-        save_watchlist(current)
+        db.remove_from_watchlist(ticker)
         update_global_watchlist()
     
-    return jsonify({"success": True, "watchlist": current})
+    return jsonify({"success": True, "watchlist": db.get_watchlist()})
 
 @app.route("/api/orders", methods=["GET"])
 def api_orders():
-    """Return recent orders from Alpaca."""
+    """Return recent orders from SQLite DB (synced with Alpaca)."""
     try:
-        from module3_trade_execution import get_orders
         limit = request.args.get("limit", 50, type=int)
-        orders = get_orders(limit=limit)
+        orders = db.get_orders(limit=limit)
         return jsonify({"orders": orders})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -490,12 +498,14 @@ def background_scheduler():
 # ─────────────────────────────────────────────
 
 if __name__ == "__main__":
+    # Initialize SQLite Database for a Fresh Start
+    db.init_db()
+    
     print("=" * 56)
     print("  🌸 MIRAI ARCSPHERE · Backend API Server (with Orchestrator)")
     print("=" * 56)
     print(f"  API:         http://localhost:5000/api/")
     print(f"  Stream:      http://localhost:5000/api/stream")
-    print(f"  MCP:         backend/mcp_server.py")
     print(f"  Data:        {DATA_FILE}")
     print("=" * 56)
 

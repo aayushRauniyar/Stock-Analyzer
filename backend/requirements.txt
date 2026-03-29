@@ -1,17 +1,26 @@
-# Mirai ArcSphere — Unified Python Dependencies
+# ── MIRAI ARCSPHERE · UNIFIED DEPENDENCIES ────────────────────
 # Install with: pip install -r requirements.txt
 
+# ── CORE ──────────────────────────────────────
+python-dotenv>=1.0.1
+requests>=2.31.0
+filelock>=3.13.0
+
+# ── MARKET DATA & ANALYSIS (M1-M2) ───────────
+alpaca-trade-api>=3.0.2
+alpaca-py>=0.20.0
 yfinance>=0.2.38
 ta>=0.11.0
 pandas>=2.0.0
 numpy>=1.24.0,<2.0.0
 schedule>=1.2.0
 pytz>=2024.1
-alpaca-trade-api>=3.0.2
-pyarrow>=16.0.0
+groq>=0.11.0
+
+# ── SERVER & STREAMING (SSE/WS) ──────────────
 flask>=3.0.0
 flask-cors>=4.0.0
-groq>=0.11.0
 websocket-client>=1.8.0
-mcp>=0.1.0
-requests>=2.31.0
+
+# ── UTILS ─────────────────────────────────────
+pyarrow>=16.0.0

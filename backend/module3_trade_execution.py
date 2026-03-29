@@ -35,8 +35,13 @@ from typing import Optional, Tuple, List, Dict
 import pandas as pd
 import pytz
 
+from dotenv import load_dotenv
+
 # Add backend directory to path for module imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(_BACKEND_DIR)
+sys.path.insert(0, _BACKEND_DIR)
+load_dotenv(os.path.join(_PROJECT_ROOT, ".env"))
 
 from config import (
     RiskLimits, PositionSizing, OrderExecution, TradingHours,
@@ -44,6 +49,7 @@ from config import (
     TRADE_LOG_PATH, TIMEZONE, validate_position_size,
     get_auto_trading_enabled, set_auto_trading_enabled
 )
+import db
 from models import TradeRecord
 
 # ─────────────────────────────────────────────
@@ -78,7 +84,11 @@ def init_alpaca_api():
     global api
     try:
         import alpaca_trade_api as tradeapi
-        api = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_BASE_URL)
+        api = tradeapi.REST(
+            key_id=ALPACA_API_KEY, 
+            secret_key=ALPACA_SECRET_KEY, 
+            base_url=ALPACA_BASE_URL
+        )
         log.info("✅ Alpaca API initialized (paper trading)")
         return api
     except Exception as e:
@@ -127,8 +137,8 @@ def get_account_info() -> dict:
             "cash": float(account.cash),
             "buying_power": float(account.buying_power),
             "portfolio_value": float(account.portfolio_value),
-            "unrealized_pl": float(account.unrealized_pl),
-            "unrealized_plpc": float(account.unrealized_plpc) if account.unrealized_plpc else 0,
+            "unrealized_pl": float(getattr(account, "unrealized_pl", 0)),
+            "unrealized_plpc": float(getattr(account, "unrealized_plpc", 0)) if getattr(account, "unrealized_plpc", None) else 0,
             "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
@@ -150,8 +160,8 @@ def get_open_positions() -> List[dict]:
                 "entry_price": float(pos.avg_fill_price),
                 "current_price": float(pos.current_price),
                 "market_value": float(pos.market_value),
-                "unrealized_pl": float(pos.unrealized_pl),
-                "unrealized_plpc": float(pos.unrealized_plpc) if pos.unrealized_plpc else 0,
+                "unrealized_pl": float(getattr(pos, "unrealized_pl", 0)),
+                "unrealized_plpc": float(getattr(pos, "unrealized_plpc", 0)) if getattr(pos, "unrealized_plpc", None) else 0,
                 "side": pos.side,
             })
         return result
@@ -405,40 +415,7 @@ def place_order(
         
         log.info(f"✅ Order placed: {order.id} ({order.status})")
         
-        # Record trade
-        trade = TradeRecord(
-            trade_id=f"trade_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-            ticker=ticker,
-            entry_date=datetime.now(),
-            entry_price=entry_price,
-            entry_qty=qty_calc,
-            entry_side=side.upper(),
-            entry_order_id=order.id,
-            exit_date=None,
-            exit_price=None,
-            exit_qty=None,
-            exit_side=None,
-            exit_reason=None,
-            exit_order_id=None,
-            signal_type=signal.get("signal", "UNKNOWN"),
-            signal_confidence=signal.get("conf", 0),
-            signal_reasoning=signal.get("reason", ""),
-            analysis_timestamp=datetime.now(),
-            stop_loss_price=stop_loss,
-            take_profit_price=take_profit,
-            risk_per_trade_pct=PositionSizing.RISK_PER_TRADE_PCT,
-            max_loss_on_trade=max_loss,
-            gross_p_l=None,
-            net_p_l=None,
-            p_l_pct=None,
-            hold_period_days=None,
-            is_short_term=None,
-            capital_gains_type="CGT",
-            notes=f"Signal confidence: {signal.get('conf', 0)}%"
-        )
-        
-        with trades_lock:
-            all_trades[order.id] = trade
+        db.log_order(order.id, ticker, side, qty_calc, status=order.status)
         
         return order.id
         
@@ -501,22 +478,8 @@ def write_trade_log(trade: TradeRecord) -> None:
 
 
 def get_trade_log() -> List[dict]:
-    """
-    Read the trade log CSV and return as list of dicts.
-    
-    Returns:
-        List of trade records
-    """
-    try:
-        if not os.path.exists(TRADE_LOG_PATH):
-            return []
-        
-        df = pd.read_csv(TRADE_LOG_PATH)
-        return df.to_dict("records")
-        
-    except Exception as e:
-        log.error(f"❌ Failed to read trade log: {e}")
-        return []
+    """Retrieve trades from the SQLite database."""
+    return db.get_trade_log()
 
 
 # ─────────────────────────────────────────────

@@ -13,3 +13,14 @@ Modules use raw `JSON` serialization/deserialization on disk (`backend/data_snap
 ## Naming & Typing
 - **Python Variables**: Uses snake_case variables and CamelCase classes. Very light use of Type Hints.
 - **REST Endpoints**: Simple verbs (`GET /api/market`). No dynamic routes/parameters mostly.
+
+## Secret Management
+- **Zero Hardcoding**: API keys (Alpaca, Groq, etc.) MUST NEVER be hardcoded.
+- **Dotenv**: All credentials reside in a root `.env` file (git-ignored).
+- **Initialization**: Every standalone Python module or service entry point must call `load_dotenv()` from the project root.
+- **Examples**: Update `.env.example` when adding new required environment variables.
+
+## Project Hygiene
+- **Minimalist Workspace**: Delete diagnostic scripts (`diagnose.py`, `test_*.py`) once a feature is verified and stable.
+- **Ignored Artifacts**: Runtime data (`data_snapshots/`), logs (`logs/`), and caches (`node_modules/`, `__pycache__/`) must be strictly excluded from version control via `.gitignore`.
+- **GSD Workflow**: Planning artifacts (`.planning/`) are allowed and encouraged for state tracking but should not contain sensitive data.

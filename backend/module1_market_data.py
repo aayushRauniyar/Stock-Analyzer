@@ -34,6 +34,7 @@ import yfinance as yf
 import threading
 import queue
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 from ta.momentum  import RSIIndicator, StochasticOscillator
 from ta.trend     import MACD, SMAIndicator, EMAIndicator, ADXIndicator
 from ta.volatility import BollingerBands, AverageTrueRange
@@ -41,6 +42,10 @@ from ta.volatility import BollingerBands, AverageTrueRange
 # ─────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
 from config import get_watchlist, save_watchlist
 
 # Fetch initial favorites from disk
@@ -58,8 +63,8 @@ ADELAIDE_TZ = pytz.timezone("Australia/Adelaide")
 MARKET_TZ   = pytz.timezone("America/New_York")
 
 # Alpaca API configuration
-ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "YOUR_ALPACA_API_KEY")
-ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "YOUR_ALPACA_SECRET_KEY")
+ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "")
+ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "")
 ALPACA_BASE_URL   = "https://paper-api.alpaca.markets"
 
 # Price drift threshold (%) — alerts if Alpaca price differs from yfinance by this much
@@ -168,7 +173,11 @@ def get_market_schedule() -> dict:
 
     try:
         import alpaca_trade_api as tradeapi
-        api   = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_BASE_URL)
+        api   = tradeapi.REST(
+            key_id=ALPACA_API_KEY, 
+            secret_key=ALPACA_SECRET_KEY, 
+            base_url=ALPACA_BASE_URL
+        )
         clock = api.get_clock()
 
         next_open  = clock.next_open.astimezone(ADELAIDE_TZ)
@@ -208,7 +217,11 @@ def fetch_alpaca_historical(ticker: str, days: int = HISTORY_DAYS) -> pd.DataFra
     """
     try:
         import alpaca_trade_api as tradeapi
-        api = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_BASE_URL)
+        api = tradeapi.REST(
+            key_id=ALPACA_API_KEY, 
+            secret_key=ALPACA_SECRET_KEY, 
+            base_url=ALPACA_BASE_URL
+        )
         
         end_time = datetime.now(MARKET_TZ)
         start_time = end_time - timedelta(days=days)
