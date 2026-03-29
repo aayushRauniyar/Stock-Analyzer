@@ -175,6 +175,161 @@ def api_market_status():
         return jsonify({"error": str(e)}), 500
 
 
+# ─────────────────────────────────────────────
+# PHASE 3: TRADING ENDPOINTS
+# ─────────────────────────────────────────────
+
+@app.route("/api/positions", methods=["GET"])
+def api_positions():
+    """Return current open positions with entry, current price, P&L."""
+    try:
+        from module3_trade_execution import get_open_positions
+        positions = get_open_positions()
+        return jsonify({
+            "positions": positions,
+            "count": len(positions),
+            "fetched_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/portfolio", methods=["GET"])
+def api_portfolio():
+    """Return account summary: equity, cash, buying power, P&L."""
+    try:
+        from module3_trade_execution import get_account_info, get_open_positions, get_daily_loss
+        from config import RiskLimits
+        
+        account = get_account_info()
+        positions = get_open_positions()
+        daily_loss = get_daily_loss()
+        
+        return jsonify({
+            "account": account,
+            "positions_count": len(positions),
+            "daily_loss": daily_loss,
+            "daily_loss_limit": RiskLimits.DAILY_MAX_LOSS_PCT,
+            "daily_loss_pct": (daily_loss / account.get("equity", 1) * 100) if account.get("equity") else 0,
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/tax-log", methods=["GET"])
+def api_tax_log():
+    """Return trade log (CSV format or JSON list)."""
+    try:
+        from module3_trade_execution import get_trade_log
+        
+        trades = get_trade_log()
+        format_type = request.args.get("format", "json")
+        
+        if format_type == "csv":
+            import csv
+            from io import StringIO
+            
+            if not trades:
+                return "", 204
+            
+            output = StringIO()
+            writer = csv.DictWriter(output, fieldnames=trades[0].keys())
+            writer.writeheader()
+            writer.writerows(trades)
+            
+            return output.getvalue(), 200, {
+                "Content-Type": "text/csv",
+                "Content-Disposition": "attachment; filename=trade_log.csv"
+            }
+        else:
+            return jsonify({
+                "trades": trades,
+                "count": len(trades),
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/toggle-auto-trade", methods=["POST"])
+def api_toggle_auto_trade():
+    """Toggle auto-trading on/off (user control)."""
+    try:
+        from module3_trade_execution import toggle_auto_trading, is_auto_trading_enabled
+        
+        data = request.get_json() or {}
+        enabled = data.get("enabled")
+        
+        if enabled is None:
+            # Toggle if not specified
+            current = is_auto_trading_enabled()
+            enabled = not current
+        
+        toggle_auto_trading(enabled)
+        
+        return jsonify({
+            "auto_trading_enabled": enabled,
+            "status": "🟢 AUTO-TRADING ENABLED" if enabled else "🔴 AUTO-TRADING DISABLED",
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/trade", methods=["POST"])
+def api_trade():
+    """Execute a manual trade."""
+    try:
+        from module3_trade_execution import place_order, get_market_data
+        
+        data = request.get_json() or {}
+        ticker = data.get("ticker")
+        side = data.get("side")  # "buy" or "sell"
+        
+        if not ticker or not side:
+            return jsonify({"error": "Missing ticker or side"}), 400
+        
+        # Get market data for the ticker
+        market_data = get_market_data(ticker)
+        
+        # Create a signal dict for logging
+        signal = {
+            "signal": "BUY" if side.lower() == "buy" else "SELL",
+            "conf": 75,  # Manual trade gets 75% confidence
+            "reason": "Manual trade execution",
+        }
+        
+        # Place the order
+        order_id = place_order(ticker, 0, side, signal, market_data)
+        
+        if order_id:
+            return jsonify({
+                "success": True,
+                "order_id": order_id,
+                "ticker": ticker,
+                "side": side,
+                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            })
+        else:
+            return jsonify({"error": "Order placement failed"}), 500
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/orchestrator-status", methods=["GET"])
+def api_orchestrator_status():
+    """Get orchestrator status: is it running, what are the signals, etc."""
+    try:
+        from orchestrator import get_orchestrator_status, is_auto_trading_enabled
+        
+        status = get_orchestrator_status()
+        return jsonify(status)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route("/api/stream", methods=["GET"])
 def api_stream():
     """Server-Sent Events endpoint for real-time updates from Module 1 WebSocket."""
@@ -281,16 +436,25 @@ def background_scheduler():
 
 if __name__ == "__main__":
     print("=" * 56)
-    print("  🌸 MIRAI ARCSPHERE · Backend API Server")
+    print("  🌸 MIRAI ARCSPHERE · Backend API Server (with Orchestrator)")
     print("=" * 56)
-    print(f"  API:     http://localhost:5000/api/")
-    print(f"  Stream:  http://localhost:5000/api/stream")
-    print(f"  Data:    {DATA_FILE}")
+    print(f"  API:         http://localhost:5000/api/")
+    print(f"  Stream:      http://localhost:5000/api/stream")
+    print(f"  MCP:         backend/mcp_server.py")
+    print(f"  Data:        {DATA_FILE}")
     print("=" * 56)
 
     # Start background scheduler in a separate thread
     scheduler_thread = threading.Thread(target=background_scheduler, daemon=True)
     scheduler_thread.start()
+
+    # Start orchestrator in a separate thread
+    try:
+        from orchestrator import run_orchestrator
+        orchestrator_thread = threading.Thread(target=run_orchestrator, daemon=True)
+        orchestrator_thread.start()
+    except Exception as e:
+        print(f"⚠ Warning: Could not start orchestrator: {e}")
 
     # Start Flask server
     app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
