@@ -1,25 +1,25 @@
 """
 ╔══════════════════════════════════════════════════════════╗
 ║     MIRAI ARCSPHERE · 未来アークスフィア                   ║
-║     Module 1 — Market Data Engine                        ║
-║     Version: 1.0.0                                       ║
-║     Status:  ✅ Active                                   ║
+║     Module 1 — Market Data Engine (v2.0)                 ║
+║     Status:  ✅ Alpaca + yfinance Dual Source            ║
 ╚══════════════════════════════════════════════════════════╝
 
 PURPOSE:
   The eyes of Mirai ArcSphere. Fetches real-time and
-  historical ETF price data, calculates technical indicators,
-  detects market hours, and schedules automatic data cycles.
+  historical ETF price data via dual sources (Alpaca + yfinance),
+  streams live bars via Alpaca WebSocket, calculates technical
+  indicators, detects market hours, and schedules automatic cycles.
 
-WHAT THIS MODULE PROVIDES TO OTHER MODULES:
-  - get_market_data(ticker)     → price + indicators dict
-  - get_all_etf_data()          → data for all watched ETFs
-  - is_market_open()            → True/False (market hours check)
-  - get_market_schedule()       → next open/close times (Adelaide AEST)
-  - run_data_scheduler()        → starts the automatic cycle loop
+ENHANCEMENTS (v2.0):
+  ✅ Alpaca Historical Bars API (primary) + yfinance (fallback)
+  ✅ Alpaca WebSocket real-time bar streaming
+  ✅ Price drift detection (alerts if Alpaca ≠ yfinance >0.5%)
+  ✅ Auto-reanalysis trigger (>1% price move detected)
+  ✅ Thread-safe SSE queue for dashboard real-time updates
 
 DEPENDENCIES:
-  pip install yfinance ta pandas numpy alpaca-trade-api schedule pytz
+  pip install yfinance ta pandas numpy alpaca-trade-api schedule pytz websocket-client
 """
 
 import os
@@ -31,6 +31,8 @@ import pytz
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import threading
+import queue
 from datetime import datetime, timedelta
 from ta.momentum  import RSIIndicator, StochasticOscillator
 from ta.trend     import MACD, SMAIndicator, EMAIndicator, ADXIndicator
@@ -53,16 +55,37 @@ HISTORY_DAYS = 90
 ADELAIDE_TZ = pytz.timezone("Australia/Adelaide")
 MARKET_TZ   = pytz.timezone("America/New_York")
 
-# Alpaca API (used for precise market open/close check)
-# Set these as environment variables or paste directly
+# Alpaca API configuration
 ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "YOUR_ALPACA_API_KEY")
 ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "YOUR_ALPACA_SECRET_KEY")
 ALPACA_BASE_URL   = "https://paper-api.alpaca.markets"
 
-# Output folder for data snapshots (used by Module 4 dashboard)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # project root
+# Price drift threshold (%) — alerts if Alpaca price differs from yfinance by this much
+PRICE_DRIFT_THRESHOLD_PCT = 0.5
+
+# Price move threshold (%) — triggers Module 2 re-analysis if price moves >1%
+REANALYSIS_THRESHOLD_PCT = 1.0
+
+# Output folder for data snapshots
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(BASE_DIR, "data_snapshots")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# ─────────────────────────────────────────────
+# GLOBAL STATE: Price tracking & SSE queue
+# ─────────────────────────────────────────────
+
+# Track last known prices for re-analysis trigger
+last_prices = {ticker: None for ticker in WATCHLIST}
+last_analysis_prices = {ticker: None for ticker in WATCHLIST}
+
+# Thread-safe queue for broadcasting price updates to server.py (SSE)
+sse_event_queue = queue.Queue()
+sse_lock = threading.Lock()
+
+# WebSocket connection state
+websocket_connection = None
+websocket_thread = None
 
 # ─────────────────────────────────────────────
 # LOGGING SETUP
@@ -153,36 +176,153 @@ def get_market_schedule() -> dict:
 
 
 # ─────────────────────────────────────────────
-# SECTION 2: DATA FETCHING
+# SECTION 2: DATA FETCHING (DUAL SOURCE)
 # ─────────────────────────────────────────────
 
-def fetch_raw_data(ticker: str, days: int = HISTORY_DAYS) -> pd.DataFrame:
+def fetch_alpaca_historical(ticker: str, days: int = HISTORY_DAYS) -> pd.DataFrame:
     """
-    Fetch raw OHLCV (Open, High, Low, Close, Volume) data from Yahoo Finance.
-
+    Fetch historical OHLCV bars from Alpaca Historical Bars API.
+    
     Args:
         ticker: ETF symbol e.g. "SPY"
         days:   Number of calendar days of history
-
+    
     Returns:
         DataFrame with OHLCV columns, or empty DataFrame on failure
     """
     try:
-        log.info(f"📥 Fetching {days}d history for {ticker}...")
+        import alpaca_trade_api as tradeapi
+        api = tradeapi.REST(ALPACA_API_KEY, ALPACA_SECRET_KEY, ALPACA_BASE_URL)
+        
+        end_time = datetime.now(MARKET_TZ)
+        start_time = end_time - timedelta(days=days)
+        
+        log.info(f"📥 Fetching {days}d Alpaca bars for {ticker} ({start_time.date()} → {end_time.date()})")
+        
+        bars = api.get_bars(
+            ticker,
+            timeframe="day",
+            start=start_time.isoformat(),
+            end=end_time.isoformat(),
+            adjustment="raw"
+        )
+        
+        if not bars.df.empty:
+            df = bars.df.copy()
+            df.index = pd.to_datetime(df.index).normalize()  # Ensure date-only index
+            log.info(f"✅ Alpaca: {ticker} → {len(df)} bars ({df.index[0].date()} → {df.index[-1].date()})")
+            return df
+        else:
+            log.warning(f"⚠ Alpaca: No bars returned for {ticker}")
+            return pd.DataFrame()
+            
+    except Exception as e:
+        log.warning(f"⚠ Alpaca Historical API unavailable for {ticker}: {e}")
+        return pd.DataFrame()
+
+
+def fetch_yfinance_data(ticker: str, days: int = HISTORY_DAYS) -> pd.DataFrame:
+    """
+    Fetch historical OHLCV data from Yahoo Finance (fallback).
+    
+    Args:
+        ticker: ETF symbol e.g. "SPY"
+        days:   Number of calendar days of history
+    
+    Returns:
+        DataFrame with OHLCV columns, or empty DataFrame on failure
+    """
+    try:
+        log.info(f"📥 Fetching {days}d yfinance history for {ticker}...")
         period = f"{days}d"
         df = yf.Ticker(ticker).history(period=period, interval="1d")
-
+        
         if df.empty:
-            log.warning(f"⚠ No data returned for {ticker}")
+            log.warning(f"⚠ yfinance: No data returned for {ticker}")
             return pd.DataFrame()
-
-        # Clean up — drop timezone from index for easier handling
+        
         df.index = df.index.tz_localize(None)
-        log.info(f"✅ {ticker}: {len(df)} rows fetched ({df.index[0].date()} → {df.index[-1].date()})")
+        log.info(f"✅ yfinance: {ticker} → {len(df)} bars ({df.index[0].date()} → {df.index[-1].date()})")
         return df
-
+        
     except Exception as e:
-        log.error(f"❌ Failed to fetch {ticker}: {e}")
+        log.error(f"❌ yfinance failed for {ticker}: {e}")
+        return pd.DataFrame()
+
+
+def compare_data_sources(alpaca_df: pd.DataFrame, yfinance_df: pd.DataFrame, ticker: str) -> dict:
+    """
+    Compare closing prices between Alpaca and yfinance.
+    Alert if drift exceeds PRICE_DRIFT_THRESHOLD_PCT.
+    
+    Returns:
+        Dict with comparison stats
+    """
+    if alpaca_df.empty or yfinance_df.empty:
+        return {"status": "incomplete", "reason": "one or both sources missing"}
+    
+    # Get common dates
+    common_dates = alpaca_df.index.intersection(yfinance_df.index)
+    if len(common_dates) == 0:
+        return {"status": "no_overlap", "reason": "no common dates"}
+    
+    alpaca_close = alpaca_df.loc[common_dates, "Close"]
+    yfinance_close = yfinance_df.loc[common_dates, "Close"]
+    
+    # Calculate percentage drift
+    price_diff_pct = ((alpaca_close - yfinance_close) / yfinance_close * 100).abs()
+    max_drift = price_diff_pct.max()
+    mean_drift = price_diff_pct.mean()
+    
+    status = "OK"
+    if max_drift > PRICE_DRIFT_THRESHOLD_PCT:
+        log.warning(f"⚠ DRIFT DETECTED for {ticker}: max={max_drift:.3f}%, mean={mean_drift:.3f}%")
+        status = "DRIFT_WARNING"
+    else:
+        log.info(f"✅ Price drift for {ticker}: max={max_drift:.3f}%, mean={mean_drift:.3f}% (acceptable)")
+    
+    return {
+        "status": status,
+        "max_drift_pct": round(max_drift, 3),
+        "mean_drift_pct": round(mean_drift, 3),
+        "common_dates": len(common_dates)
+    }
+
+
+def fetch_raw_data(ticker: str, days: int = HISTORY_DAYS) -> pd.DataFrame:
+    """
+    Fetch raw OHLCV data using dual sources: Alpaca (primary) + yfinance (fallback).
+    
+    Uses Alpaca Historical Bars API if available, falls back to yfinance.
+    Compares sources to detect price drift.
+    
+    Args:
+        ticker: ETF symbol e.g. "SPY"
+        days:   Number of calendar days of history
+    
+    Returns:
+        DataFrame with OHLCV columns
+    """
+    log.info(f"🔄 Fetching dual-source data for {ticker}...")
+    
+    # Try Alpaca first
+    alpaca_df = fetch_alpaca_historical(ticker, days)
+    
+    # Try yfinance as backup
+    yfinance_df = fetch_yfinance_data(ticker, days)
+    
+    # Compare and log drift
+    comparison = compare_data_sources(alpaca_df, yfinance_df, ticker)
+    
+    # Prefer Alpaca if available, else yfinance
+    if not alpaca_df.empty:
+        log.info(f"✅ Using Alpaca data for {ticker} (comparison: {comparison['status']})")
+        return alpaca_df
+    elif not yfinance_df.empty:
+        log.info(f"⚠ Alpaca unavailable, falling back to yfinance for {ticker}")
+        return yfinance_df
+    else:
+        log.error(f"❌ All data sources failed for {ticker}")
         return pd.DataFrame()
 
 
@@ -403,7 +543,7 @@ def get_all_etf_data() -> dict:
 
     for ticker in WATCHLIST:
         results[ticker] = get_market_data(ticker)
-        time.sleep(0.5)  # Be polite to Yahoo Finance API
+        time.sleep(0.5)  # Be polite to APIs
 
     # Save snapshot to disk (Module 4 dashboard reads this)
     snapshot = {
@@ -422,6 +562,167 @@ def get_all_etf_data() -> dict:
 
 
 # ─────────────────────────────────────────────
+# SECTION 5B: PRICE TRACKING & RE-ANALYSIS
+# ─────────────────────────────────────────────
+
+def check_reanalysis_needed(ticker: str, current_price: float) -> bool:
+    """
+    Check if a price move warrants Module 2 re-analysis.
+    Compares against last analysis price (not just last price).
+    
+    Args:
+        ticker: ETF symbol
+        current_price: Current closing price
+    
+    Returns:
+        True if price moved >REANALYSIS_THRESHOLD_PCT since last analysis
+    """
+    last_analysis = last_analysis_prices.get(ticker)
+    
+    if last_analysis is None:
+        # First time — set baseline
+        last_analysis_prices[ticker] = current_price
+        return False
+    
+    price_move_pct = abs((current_price - last_analysis) / last_analysis * 100)
+    
+    if price_move_pct > REANALYSIS_THRESHOLD_PCT:
+        log.info(f"📈 {ticker}: Price moved {price_move_pct:.2f}% (>{REANALYSIS_THRESHOLD_PCT}%) — triggering re-analysis")
+        last_analysis_prices[ticker] = current_price
+        return True
+    
+    return False
+
+
+def broadcast_price_update(ticker: str, data: dict, should_reanalyse: bool = False):
+    """
+    Push a price update to the SSE queue for real-time dashboard updates.
+    server.py will consume this and broadcast to connected clients.
+    
+    Args:
+        ticker: ETF symbol
+        data: Market data dict from get_market_data()
+        should_reanalyse: If True, server should trigger Module 2 analysis
+    """
+    try:
+        event = {
+            "type": "price_update",
+            "ticker": ticker,
+            "price": data.get("price"),
+            "change_pct": data.get("daily_change_pct"),
+            "rsi": data.get("rsi"),
+            "macd_signal": data.get("macd_signal"),
+            "timestamp": datetime.now().isoformat(),
+            "should_reanalyse": should_reanalyse,
+        }
+        sse_event_queue.put_nowait(event)
+    except queue.Full:
+        log.warning(f"⚠ SSE queue full, dropping update for {ticker}")
+
+
+# ─────────────────────────────────────────────
+# SECTION 5C: ALPACA WEBSOCKET STREAMING
+# ─────────────────────────────────────────────
+
+def on_bar(bar):
+    """
+    WebSocket callback: Called when a new bar arrives from Alpaca.
+    Updates last_prices and triggers re-analysis if needed.
+    """
+    try:
+        ticker = bar.symbol
+        price = bar.close
+        
+        last_prices[ticker] = price
+        
+        needs_reanalysis = check_reanalysis_needed(ticker, price)
+        
+        # Fetch full market data and broadcast
+        market_data = get_market_data(ticker)
+        broadcast_price_update(ticker, market_data, should_reanalyse=needs_reanalysis)
+        
+        log.info(f"📊 WebSocket: {ticker} → ${price} (reanalyse: {needs_reanalysis})")
+    except Exception as e:
+        log.error(f"❌ WebSocket callback error: {e}")
+
+
+def start_websocket_stream():
+    """
+    Start Alpaca WebSocket connection for real-time bar updates.
+    Runs in a background thread.
+    
+    This streams 1-min bars for our watchlist tickers.
+    Falls back gracefully if WebSocket unavailable.
+    """
+    global websocket_connection, websocket_thread
+    
+    try:
+        import alpaca_trade_api as tradeapi
+        from alpaca_trade_api.rest import APIError
+        
+        log.info(f"🔌 Starting Alpaca WebSocket for: {', '.join(WATCHLIST)}")
+        
+        conn = tradeapi.StreamConn(
+            base_url=ALPACA_BASE_URL,
+            key_id=ALPACA_API_KEY,
+            secret_key=ALPACA_SECRET_KEY
+        )
+        
+        # Subscribe to bar updates for all tickers
+        @conn.on_bars()
+        def handle_bars(bars):
+            for bar in bars:
+                on_bar(bar)
+        
+        websocket_connection = conn
+        conn.run()
+        
+    except Exception as e:
+        log.warning(f"⚠ WebSocket connection failed: {e}")
+        log.info(f"   Continuing with fallback polling mode...")
+        websocket_connection = None
+
+
+def ensure_websocket_alive():
+    """
+    Monitor WebSocket connection. Attempt to restart if it dies.
+    Called periodically from the main scheduler loop.
+    """
+    global websocket_thread
+    
+    if websocket_thread is None or not websocket_thread.is_alive():
+        log.info("🔄 WebSocket thread dead or not started — attempting restart...")
+        websocket_thread = threading.Thread(target=start_websocket_stream, daemon=True)
+        websocket_thread.start()
+        time.sleep(2)
+
+
+# ─────────────────────────────────────────────
+# SECTION 5D: SSE QUEUE INTERFACE FOR SERVER
+# ─────────────────────────────────────────────
+
+def get_sse_events(timeout: float = 0.1) -> list:
+    """
+    Get all pending SSE events from the queue.
+    Called by server.py to broadcast to dashboard.
+    
+    Args:
+        timeout: How long to wait for events
+    
+    Returns:
+        List of event dicts
+    """
+    events = []
+    while True:
+        try:
+            event = sse_event_queue.get(timeout=timeout)
+            events.append(event)
+        except queue.Empty:
+            break
+    return events
+
+
+# ─────────────────────────────────────────────
 # SECTION 6: AUTOMATIC SCHEDULER
 # ─────────────────────────────────────────────
 
@@ -429,9 +730,13 @@ def scheduled_cycle():
     """
     Called automatically by the scheduler.
     Only runs if market is open — skips otherwise.
+    Ensures WebSocket is alive.
     """
     schedule_info = get_market_schedule()
     log.info(f"⏰ Scheduled cycle triggered | Adelaide time: {schedule_info.get('current_adelaide')}")
+
+    # Monitor WebSocket connection
+    ensure_websocket_alive()
 
     if not is_market_open():
         log.info(f"⏸  Market closed — skipping data fetch")
@@ -444,17 +749,26 @@ def scheduled_cycle():
 
 def run_data_scheduler():
     """
-    Start the automatic scheduling loop.
+    Start the automatic scheduling loop with WebSocket streaming.
     Runs every FETCH_INTERVAL_MINUTES minutes indefinitely.
-    This is the entry point when running Module 1 standalone.
+    Starts WebSocket in background for real-time updates.
     """
     log.info("=" * 56)
-    log.info("  🌸 MIRAI ARCSPHERE · Module 1 · Market Data Engine")
+    log.info("  🌸 MIRAI ARCSPHERE · Module 1 · Market Data Engine v2.0")
     log.info("=" * 56)
     log.info(f"  Watching:  {', '.join(WATCHLIST)}")
     log.info(f"  Interval:  Every {FETCH_INTERVAL_MINUTES} minutes (market hours only)")
+    log.info(f"  Drift Threshold: {PRICE_DRIFT_THRESHOLD_PCT}%")
+    log.info(f"  Reanalysis Threshold: {REANALYSIS_THRESHOLD_PCT}%")
     log.info(f"  Timezone:  Adelaide (ACST/ACDT)")
     log.info("=" * 56)
+
+    # Start WebSocket in background thread
+    log.info("🔌 Starting Alpaca WebSocket listener...")
+    global websocket_thread
+    websocket_thread = threading.Thread(target=start_websocket_stream, daemon=True)
+    websocket_thread.start()
+    time.sleep(2)
 
     # Run once immediately on startup
     log.info("🚀 Running initial data fetch on startup...")
