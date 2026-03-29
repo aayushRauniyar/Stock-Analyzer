@@ -367,6 +367,20 @@ export default function App() {
         if (d.updated_at) setLastUpdate(d.updated_at);
       } catch (_) {}
     });
+    es.addEventListener("order_update", e => {
+      try {
+        const newOrder = JSON.parse(e.data);
+        setOrders(prev => {
+          const idx = prev.findIndex(o => o.id === newOrder.id);
+          if (idx !== -1) {
+            const copy = [...prev];
+            copy[idx] = { ...copy[idx], ...newOrder };
+            return copy;
+          }
+          return [newOrder, ...prev];
+        });
+      } catch (_) {}
+    });
     es.onerror = () => setStreamActive(false);
     return () => { es.close(); sseRef.current = null; };
   }, []);
@@ -406,6 +420,13 @@ export default function App() {
       setTradeMsg(`SYSTEM ERROR — ${e.message}`);
     }
     setTimeout(() => setTradeMsg(null), 5000);
+  };
+
+  const cancelOrder = async (id) => {
+    try {
+      await fetch(`${API_BASE}/orders/${id}`, { method:"DELETE" });
+      fetchAll();
+    } catch (_) {}
   };
 
 
@@ -905,25 +926,38 @@ export default function App() {
               <div style={panelCard}>
                 <table style={{ width:"100%", borderCollapse:"collapse" }}>
                   <thead>
-                    <tr>{["ID","TICKER","SIDE","TYPE","QTY","FILLED","PRICE","STATUS","CREATED"].map(h => <th key={h} style={th}>{h}</th>)}</tr>
+                    <tr>{["ID","TICKER","SIDE","TYPE","QTY","FILLED","PRICE","STATUS","CREATED","ACTION"].map(h => <th key={h} style={th}>{h}</th>)}</tr>
                   </thead>
                   <tbody>
                     {orders.length === 0 ? (
-                      <tr><td colSpan="9" style={{ ...td, textAlign:"center" }}>NO RECENT ORDERS FOUND</td></tr>
+                      <tr><td colSpan="10" style={{ ...td, textAlign:"center" }}>NO RECENT ORDERS FOUND</td></tr>
                     ) : (
-                      orders.map(o => (
-                        <tr key={o.id}>
-                          <td style={{ ...td, fontSize:9, color:C.textMuted }}>{o.id.slice(0,8)}...</td>
-                          <td style={{ ...td, color:C.orange, fontWeight:700 }}>{o.ticker}</td>
-                          <td style={{ ...td, color: o.side==="BUY" ? C.green : C.red }}>{o.side}</td>
-                          <td style={td}>{o.type.toUpperCase()}</td>
-                          <td style={td}>{o.qty}</td>
-                          <td style={td}>{o.filled_qty}</td>
-                          <td style={td}>{o.filled_avg_price ? `$${o.filled_avg_price.toFixed(2)}` : "—"}</td>
-                          <td style={{ ...td, fontWeight:700, color: o.status==="FILLED" ? C.green : o.status==="CANCELED" ? C.red : C.amber }}>{o.status}</td>
-                          <td style={td}>{new Date(o.created_at).toLocaleString()}</td>
-                        </tr>
-                      ))
+                      orders.map(o => {
+                        const isPending = !["FILLED", "CANCELED", "REJECTED"].includes(o.status);
+                        return (
+                          <tr key={o.id}>
+                            <td style={{ ...td, fontSize:9, color:C.textMuted }}>{o.id.slice(0,8)}...</td>
+                            <td style={{ ...td, color:C.orange, fontWeight:700 }}>{o.ticker}</td>
+                            <td style={{ ...td, color: o.side==="BUY" ? C.green : C.red }}>{o.side}</td>
+                            <td style={td}>{String(o.type).toUpperCase()}</td>
+                            <td style={td}>{o.qty}</td>
+                            <td style={td}>{o.filled_qty}</td>
+                            <td style={td}>{o.filled_avg_price ? `$${Number(o.filled_avg_price).toFixed(2)}` : "—"}</td>
+                            <td style={{ ...td, fontWeight:700, color: o.status==="FILLED" ? C.green : o.status==="CANCELED" ? C.red : C.amber }}>{o.status}</td>
+                            <td style={td}>{new Date(o.created_at).toLocaleString()}</td>
+                            <td style={td}>
+                              {isPending ? (
+                                <button
+                                  onClick={() => cancelOrder(o.id)}
+                                  style={{ background:"transparent", border:`1px solid ${C.red}`, color:C.red, cursor:"pointer", padding:"2px 8px", fontSize:10, fontFamily:"'IBM Plex Mono', monospace" }}
+                                >
+                                  CANCEL
+                                </button>
+                              ) : "—"}
+                            </td>
+                          </tr>
+                        );
+                      })
                     )}
                   </tbody>
                 </table>

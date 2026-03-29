@@ -327,6 +327,17 @@ def api_orders():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/orders/<order_id>", methods=["DELETE"])
+def api_cancel_order(order_id):
+    """Cancel a pending/working order."""
+    try:
+        from module3_trade_execution import get_api
+        api = get_api()
+        api.cancel_order(order_id)
+        return jsonify({"success": True, "message": f"Order {order_id} cancelled"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/trade", methods=["POST"])
 def api_trade():
     """Execute a trade (manual or AI-sized)."""
@@ -491,6 +502,14 @@ if __name__ == "__main__":
     # Start background scheduler in a separate thread
     scheduler_thread = threading.Thread(target=background_scheduler, daemon=True)
     scheduler_thread.start()
+
+    # Start Alpaca order stream in a separate thread
+    try:
+        import alpaca_stream
+        stream_thread = threading.Thread(target=alpaca_stream.start_stream, daemon=True)
+        stream_thread.start()
+    except Exception as e:
+        print(f"⚠ Warning: Could not start Alpaca stream: {e}")
 
     # Start orchestrator in a separate thread
     try:

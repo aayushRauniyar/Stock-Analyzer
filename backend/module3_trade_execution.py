@@ -85,6 +85,12 @@ def init_alpaca_api():
         log.error(f"❌ Failed to initialize Alpaca API: {e}")
         return None
 
+def get_api():
+    global api
+    if api is None:
+        init_alpaca_api()
+    return api
+
 
 # ─────────────────────────────────────────────
 # GLOBAL STATE: TRADE TRACKING
