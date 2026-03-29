@@ -1,5 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 
+// ─── CONSTANTS ─────────────────────────────────────────────────────────────────
+const API_BASE = "http://localhost:5000/api";
+const SSE_ENDPOINT = "http://localhost:5000/api/stream";
+
 // ─── THEME ────────────────────────────────────────────────────────────────────
 const THEMES = {
   light: {
@@ -163,6 +167,7 @@ const PAGES = [
   { id: "overview",  icon: "◈",  label: "Overview",    jp: "概要" },
   { id: "market",    icon: "眼",  label: "Market Data", jp: "市場" },
   { id: "signals",   icon: "脳",  label: "AI Signals",  jp: "分析" },
+  { id: "trading",   icon: "🤖", label: "Auto-Trade",  jp: "自動売買" },
   { id: "positions", icon: "取",  label: "Positions",   jp: "保有" },
   { id: "taxlog",    icon: "税",  label: "Tax Log",     jp: "税務" },
   { id: "modules",   icon: "守",  label: "Modules",     jp: "状態" },
@@ -182,6 +187,10 @@ export default function App() {
   const [lastUpdate, setLastUpdate] = useState(null);
   const [mktOpen, setMktOpen]     = useState(false);
   const [streamActive, setStreamActive] = useState(false);
+  const [autoTradeEnabled, setAutoTradeEnabled] = useState(false);
+  const [manualTradeForm, setManualTradeForm] = useState({ ticker: "SPY", action: "BUY", qty: 1, price: 531.24 });
+  const [positions, setPositions] = useState(POSITIONS);
+  const [tradingHistory, setTradingHistory] = useState(TAX_LOG);
 
   const T = dark ? THEMES.dark : THEMES.light;
 
@@ -1034,6 +1043,212 @@ export default function App() {
                     })}
                   </div>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* ════════════════════ AUTO-TRADING (MODULE 3) ═════════════════════ */}
+          {page === "trading" && (
+            <div style={{ animation:"fadeUp 0.35s ease" }}>
+              <SectionTitle jp="Module 3 · 自動売買エンジン" en="Auto-Trading Control"
+                sub="Risk management, position sizing, trade execution" T={T} />
+
+              {/* Auto-trade toggle */}
+              <div style={card} >
+                <div style={{ display:"flex", justifyContent:"space-between",
+                  alignItems:"center", marginBottom:16 }}>
+                  <div>
+                    <div style={{ fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                      letterSpacing:"0.22em", textTransform:"uppercase",
+                      color:T.textMuted, marginBottom:4 }}>
+                      Auto-Trading Status
+                    </div>
+                    <div style={{ fontFamily:"'Zen Old Mincho',serif", fontSize:14,
+                      fontWeight:700, color:T.text }}>
+                      {autoTradeEnabled ? "🟢 ACTIVE" : "🔴 DISABLED"}
+                    </div>
+                  </div>
+                  <button onClick={() => setAutoTradeEnabled(!autoTradeEnabled)}
+                    style={{ width:60, height:28, borderRadius:14, position:"relative",
+                      background:autoTradeEnabled
+                        ? `linear-gradient(135deg,${T.moss},${T.moss}50)`
+                        : `linear-gradient(135deg,#f0f0f0,#e0e0e0)`,
+                      border:`1.5px solid ${autoTradeEnabled?T.moss:T.border}`,
+                      cursor:"pointer", transition:"all 0.35s" }}>
+                    <div style={{ position:"absolute", top:2,
+                      left:autoTradeEnabled?36:2, width:20, height:20,
+                      borderRadius:"50%", background:"#fff",
+                      boxShadow:`0 1px 4px ${autoTradeEnabled?T.moss+"40":"#00000020"}`,
+                      transition:"left 0.32s cubic-bezier(.34,1.56,.64,1)" }} />
+                  </button>
+                </div>
+                <div style={{ fontSize:11, color:T.textMuted, lineHeight:1.6,
+                  padding:"10px", background:T.bgAlt, borderRadius:8,
+                  border:`1px solid ${T.border}` }}>
+                  {autoTradeEnabled
+                    ? "🔄 Auto-trading is ON. AI signals >70% confidence will execute trades automatically, respecting all risk limits."
+                    : "⚠️ Auto-trading is OFF. Use manual trade form below to execute trades."}
+                </div>
+              </div>
+
+              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16, marginBottom:20 }}>
+                {/* Risk Summary */}
+                <div style={card}>
+                  <div style={{ fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                    letterSpacing:"0.22em", textTransform:"uppercase",
+                    color:T.textMuted, marginBottom:12 }}>
+                    Risk Limits (ATO)
+                  </div>
+                  {[
+                    { label:"Daily Max Loss", val:"-5%", curr:"-1.2%", color:T.gold },
+                    { label:"Max Position", val:"50%", curr:"34.2%", color:T.moss },
+                    { label:"Stop Loss", val:"ATR-based", curr:"Dynamic", color:T.rose },
+                    { label:"Leverage", val:"1:1", curr:"1:1", color:T.text },
+                  ].map((r,i) => (
+                    <div key={i} style={{ display:"flex", justifyContent:"space-between",
+                      alignItems:"center", padding:"8px 0",
+                      borderBottom:i<3?`1px solid ${T.border}30`:"none" }}>
+                      <div style={{ fontSize:11, color:T.textMuted }}>{r.label}</div>
+                      <div style={{ display:"flex", gap:8, alignItems:"center" }}>
+                        <span style={{ fontSize:10, fontWeight:700, color:T.textMuted }}>{r.val}</span>
+                        <span style={{ fontSize:11, fontWeight:700, color:r.color }}>{r.curr}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Account Summary */}
+                <div style={card}>
+                  <div style={{ fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                    letterSpacing:"0.22em", textTransform:"uppercase",
+                    color:T.textMuted, marginBottom:12 }}>
+                    Account Summary
+                  </div>
+                  {[
+                    { label:"Portfolio Value", val:POSITIONS.reduce((s,p)=>s+p.qty*p.curr,0)+cash, currency:true },
+                    { label:"Unrealised P&L", val:POSITIONS.reduce((s,p)=>s+p.qty*(p.curr-p.entry),0), currency:true },
+                    { label:"Cash Available", val:cash, currency:true },
+                    { label:"Open Positions", val:positions.length, currency:false },
+                  ].map((a,i) => (
+                    <div key={i} style={{ display:"flex", justifyContent:"space-between",
+                      alignItems:"center", padding:"8px 0",
+                      borderBottom:i<3?`1px solid ${T.border}30`:"none" }}>
+                      <div style={{ fontSize:11, color:T.textMuted }}>{a.label}</div>
+                      <span style={{ fontSize:12, fontWeight:700, color:T.text }}>
+                        {a.currency ? `$${a.val.toFixed(2)}` : a.val}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Manual Trade Form */}
+              <div style={card}>
+                <div style={{ fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                  letterSpacing:"0.22em", textTransform:"uppercase",
+                  color:T.textMuted, marginBottom:12 }}>
+                  Manual Trade Execution
+                </div>
+                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:10, marginBottom:12 }}>
+                  <div>
+                    <label style={{ fontSize:10, color:T.textMuted, display:"block",
+                      marginBottom:4 }}>Ticker</label>
+                    <select value={manualTradeForm.ticker}
+                      onChange={(e)=>setManualTradeForm({...manualTradeForm,ticker:e.target.value})}
+                      style={{ width:"100%", padding:"8px", borderRadius:6,
+                        background:T.bgAlt, border:`1px solid ${T.border}`,
+                        color:T.text, fontFamily:"'Shippori Mincho B1',serif",
+                        fontSize:11 }}>
+                      {["SPY","QQQ","VTI"].map(t=><option key={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize:10, color:T.textMuted, display:"block",
+                      marginBottom:4 }}>Action</label>
+                    <select value={manualTradeForm.action}
+                      onChange={(e)=>setManualTradeForm({...manualTradeForm,action:e.target.value})}
+                      style={{ width:"100%", padding:"8px", borderRadius:6,
+                        background:T.bgAlt, border:`1px solid ${T.border}`,
+                        color:T.text, fontFamily:"'Shippori Mincho B1',serif",
+                        fontSize:11 }}>
+                      <option>BUY</option>
+                      <option>SELL</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ fontSize:10, color:T.textMuted, display:"block",
+                      marginBottom:4 }}>Qty</label>
+                    <input type="number" value={manualTradeForm.qty}
+                      onChange={(e)=>setManualTradeForm({...manualTradeForm,qty:parseInt(e.target.value)||0})}
+                      style={{ width:"100%", padding:"8px", borderRadius:6,
+                        background:T.bgAlt, border:`1px solid ${T.border}`,
+                        color:T.text, fontFamily:"'Shippori Mincho B1',serif",
+                        fontSize:11 }} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize:10, color:T.textMuted, display:"block",
+                      marginBottom:4 }}>Price</label>
+                    <input type="number" step="0.01" value={manualTradeForm.price}
+                      onChange={(e)=>setManualTradeForm({...manualTradeForm,price:parseFloat(e.target.value)||0})}
+                      style={{ width:"100%", padding:"8px", borderRadius:6,
+                        background:T.bgAlt, border:`1px solid ${T.border}`,
+                        color:T.text, fontFamily:"'Shippori Mincho B1',serif",
+                        fontSize:11 }} />
+                  </div>
+                </div>
+                <button onClick={async()=>{
+                  try {
+                    const res = await fetch(`${API_BASE}/trade`, {
+                      method:"POST",
+                      headers:{"Content-Type":"application/json"},
+                      body:JSON.stringify(manualTradeForm)
+                    });
+                    if(res.ok) {
+                      alert("✅ Trade executed!");
+                      setTradingHistory([{date:new Date().toISOString().split("T")[0],t:manualTradeForm.ticker,
+                        act:manualTradeForm.action,qty:manualTradeForm.qty,px:manualTradeForm.price,
+                        tot:manualTradeForm.qty*manualTradeForm.price,why:"Manual trade"},...tradingHistory]);
+                    }
+                  } catch(e) { alert("❌ Trade failed: "+e.message); }
+                }}
+                  style={{ width:"100%", padding:"9px", background:T.moss, color:"#fff",
+                    fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                    letterSpacing:"0.14em", textTransform:"uppercase",
+                    border:"none", borderRadius:7, cursor:"pointer",
+                    transition:"all 0.2s" }}>
+                  📝 Execute Trade
+                </button>
+              </div>
+
+              {/* Trade History (Last 5) */}
+              <div style={card}>
+                <div style={{ fontFamily:"'Shippori Mincho B1',serif", fontSize:9,
+                  letterSpacing:"0.22em", textTransform:"uppercase",
+                  color:T.textMuted, marginBottom:12 }}>
+                  Recent Trades (Last 5)
+                </div>
+                <table style={{ width:"100%", borderCollapse:"collapse" }}>
+                  <thead><tr>
+                    {["Date","Ticker","Action","Qty","Price","Total","Reason"].map(h=>(
+                      <th key={h} style={th}>{h}</th>
+                    ))}
+                  </tr></thead>
+                  <tbody>
+                    {tradingHistory.slice(0,5).map((t,i)=>(
+                      <tr key={i} className="row-hvr"
+                        style={{ background:i%2===0?"transparent":T.bgAlt+"80" }}>
+                        <td style={{...td,fontSize:10}}>{t.date}</td>
+                        <td style={{...td,fontWeight:700,color:T.text}}>{t.t}</td>
+                        <td style={{...td,fontWeight:700,color:t.act==="BUY"?T.up:T.down}}>
+                          {t.act}</td>
+                        <td style={td}>{t.qty}</td>
+                        <td style={td}>${t.px.toFixed(2)}</td>
+                        <td style={{...td,fontWeight:700}}>${t.tot.toFixed(2)}</td>
+                        <td style={{...td,fontSize:10}}>{t.why}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           )}
