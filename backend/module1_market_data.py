@@ -56,9 +56,9 @@ ADELAIDE_TZ = pytz.timezone("Australia/Adelaide")
 MARKET_TZ   = pytz.timezone("America/New_York")
 
 # Alpaca API configuration
-ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "YOUR_ALPACA_API_KEY")
-ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "YOUR_ALPACA_SECRET_KEY")
-ALPACA_BASE_URL   = "https://paper-api.alpaca.markets"
+ALPACA_API_KEY    = os.getenv("APCA_API_KEY_ID",     "YOUR_ALPACA_API_KEY")
+ALPACA_SECRET_KEY = os.getenv("APCA_API_SECRET_KEY", "YOUR_ALPACA_SECRET_KEY")
+ALPACA_BASE_URL   = os.getenv("APCA_API_BASE_URL", "https://paper-api.alpaca.markets/v2")
 
 # Price drift threshold (%) — alerts if Alpaca price differs from yfinance by this much
 PRICE_DRIFT_THRESHOLD_PCT = 0.5
