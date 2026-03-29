@@ -37,9 +37,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from module1_market_data import (
     get_all_etf_data, get_market_data, is_market_open, get_market_schedule,
-    get_sse_events, check_reanalysis_needed
+    get_sse_events, check_reanalysis_needed, update_global_watchlist
 )
 from module2_ai_analysis import analyse_all, analyse_ticker, get_cached_signals, should_reanalyse
+from config import get_watchlist, save_watchlist
+
 
 # ─────────────────────────────────────────────
 # CONFIGURATION
@@ -277,45 +279,87 @@ def api_toggle_auto_trade():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route("/api/watchlist", methods=["GET"])
+def api_get_watchlist():
+    """Return the current favorites watchlist."""
+    return jsonify({"watchlist": get_watchlist()})
+
+@app.route("/api/watchlist/add", methods=["POST"])
+def api_add_to_watchlist():
+    """Add a ticker to the favorites watchlist."""
+    data = request.get_json() or {}
+    ticker = data.get("ticker", "").upper().strip()
+    if not ticker: return jsonify({"error": "No ticker provided"}), 400
+    
+    current = get_watchlist()
+    if ticker not in current:
+        current.append(ticker)
+        save_watchlist(current)
+        update_global_watchlist()
+        # Trigger a background fetch for the new ticker
+        threading.Thread(target=get_market_data, args=(ticker,), daemon=True).start()
+    
+    return jsonify({"success": True, "watchlist": current})
+
+@app.route("/api/watchlist/remove", methods=["POST"])
+def api_remove_from_watchlist():
+    """Remove a ticker from the favorites watchlist."""
+    data = request.get_json() or {}
+    ticker = data.get("ticker", "").upper().strip()
+    if not ticker: return jsonify({"error": "No ticker provided"}), 400
+    
+    current = get_watchlist()
+    if ticker in current:
+        current.remove(ticker)
+        save_watchlist(current)
+        update_global_watchlist()
+    
+    return jsonify({"success": True, "watchlist": current})
+
+@app.route("/api/orders", methods=["GET"])
+def api_orders():
+    """Return recent orders from Alpaca."""
+    try:
+        from module3_trade_execution import get_orders
+        limit = request.args.get("limit", 50, type=int)
+        orders = get_orders(limit=limit)
+        return jsonify({"orders": orders})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route("/api/trade", methods=["POST"])
 def api_trade():
-    """Execute a manual trade."""
+    """Execute a trade (manual or AI-sized)."""
     try:
-        from module3_trade_execution import place_order, get_market_data
+        from module3_trade_execution import place_order, direct_place_order, get_market_data as get_mkt
         
         data = request.get_json() or {}
-        ticker = data.get("ticker")
-        side = data.get("side")  # "buy" or "sell"
+        ticker = data.get("ticker", "").upper()
+        side = data.get("side", "").lower()
+        qty = data.get("qty")
+        auto_size = data.get("auto_size", False)
         
         if not ticker or not side:
             return jsonify({"error": "Missing ticker or side"}), 400
         
-        # Get market data for the ticker
-        market_data = get_market_data(ticker)
-        
-        # Create a signal dict for logging
-        signal = {
-            "signal": "BUY" if side.lower() == "buy" else "SELL",
-            "conf": 75,  # Manual trade gets 75% confidence
-            "reason": "Manual trade execution",
-        }
-        
-        # Place the order
-        order_id = place_order(ticker, 0, side, signal, market_data)
+        if auto_size:
+            # Use strict ATR-based sizing (Phases 1-3 logic)
+            mkt_data = get_mkt(ticker)
+            sig = {"signal": "BUY" if side == "buy" else "SELL", "conf": 75, "reason": "Manual UI Trigger"}
+            order_id = place_order(ticker, 0, side, sig, mkt_data)
+        else:
+            # Direct manual execution
+            if not qty or int(qty) <= 0:
+                return jsonify({"error": "Quantity required for manual trade"}), 400
+            order_id = direct_place_order(ticker, int(qty), side)
         
         if order_id:
-            return jsonify({
-                "success": True,
-                "order_id": order_id,
-                "ticker": ticker,
-                "side": side,
-                "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            })
+            return jsonify({"success": True, "order_id": order_id, "ticker": ticker, "side": side})
         else:
-            return jsonify({"error": "Order placement failed"}), 500
-    
+            return jsonify({"error": "Order execution failed"}), 500
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 @app.route("/api/orchestrator-status", methods=["GET"])

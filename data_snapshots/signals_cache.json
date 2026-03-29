@@ -1,59 +1,67 @@
 {
-  "cached_at": "2026-03-11 22:24:23",
+  "cached_at": "2026-03-29 12:41:51",
+  "engine": "groq",
+  "model": "llama-3.3-70b-versatile",
   "signals": {
     "SPY": {
       "ticker": "SPY",
-      "signal": "SELL",
-      "conf": 58,
+      "signal": "HOLD",
+      "conf": 55,
       "risk": "MEDIUM",
-      "entry": 675.83,
-      "exit": 697.5,
-      "stop": 656.86,
+      "entry": 632.82,
+      "exit": 653.11,
+      "stop": 615.07,
       "tf": "MEDIUM",
-      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 43.42.",
+      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 28.51.",
       "risks": [
         "No AI analysis available",
         "Based on indicators only"
       ],
-      "analysed_at": "2026-03-11 22:24:23",
-      "price_at_analysis": 677.18,
-      "is_placeholder": true
+      "analysed_at": "2026-03-29 12:41:51",
+      "price_at_analysis": 634.09,
+      "is_placeholder": true,
+      "model": "technical-only",
+      "latency_ms": 0
     },
     "QQQ": {
       "ticker": "QQQ",
-      "signal": "BUY",
-      "conf": 62,
+      "signal": "HOLD",
+      "conf": 55,
       "risk": "MEDIUM",
-      "entry": 606.55,
-      "exit": 626.0,
-      "stop": 589.54,
+      "entry": 561.45,
+      "exit": 579.46,
+      "stop": 545.7,
       "tf": "MEDIUM",
-      "reason": "Auto-generated from technical indicators. MACD is BULLISH, RSI at 48.85.",
+      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 29.92.",
       "risks": [
         "No AI analysis available",
         "Based on indicators only"
       ],
-      "analysed_at": "2026-03-11 22:24:23",
-      "price_at_analysis": 607.77,
-      "is_placeholder": true
+      "analysed_at": "2026-03-29 12:41:51",
+      "price_at_analysis": 562.58,
+      "is_placeholder": true,
+      "model": "technical-only",
+      "latency_ms": 0
     },
     "VTI": {
       "ticker": "VTI",
-      "signal": "SELL",
-      "conf": 58,
+      "signal": "HOLD",
+      "conf": 55,
       "risk": "MEDIUM",
-      "entry": 332.84,
-      "exit": 343.52,
-      "stop": 323.5,
+      "entry": 312.46,
+      "exit": 322.48,
+      "stop": 303.7,
       "tf": "MEDIUM",
-      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 42.68.",
+      "reason": "Auto-generated from technical indicators. MACD is BEARISH, RSI at 28.97.",
       "risks": [
         "No AI analysis available",
         "Based on indicators only"
       ],
-      "analysed_at": "2026-03-11 22:24:23",
-      "price_at_analysis": 333.51,
-      "is_placeholder": true
+      "analysed_at": "2026-03-29 12:41:51",
+      "price_at_analysis": 313.09,
+      "is_placeholder": true,
+      "model": "technical-only",
+      "latency_ms": 0
     }
   }
 }

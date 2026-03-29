@@ -131,16 +131,9 @@ def get_account_info() -> dict:
 
 
 def get_open_positions() -> List[dict]:
-    """
-    Get all currently open positions from Alpaca.
-    
-    Returns:
-        List of position dicts with ticker, qty, entry price, etc.
-    """
+    """Get all currently open positions from Alpaca."""
     global api
-    if api is None:
-        api = init_alpaca_api()
-    
+    if api is None: api = init_alpaca_api()
     try:
         positions = api.list_positions()
         result = []
@@ -153,14 +146,40 @@ def get_open_positions() -> List[dict]:
                 "market_value": float(pos.market_value),
                 "unrealized_pl": float(pos.unrealized_pl),
                 "unrealized_plpc": float(pos.unrealized_plpc) if pos.unrealized_plpc else 0,
-                "side": pos.side,  # "long" or "short"
+                "side": pos.side,
             })
-        
-        log.info(f"📊 {len(result)} open positions")
         return result
     except Exception as e:
         log.error(f"❌ Failed to list positions: {e}")
         return []
+
+
+def get_orders(limit: int = 50) -> List[dict]:
+    """Get recent orders from Alpaca."""
+    global api
+    if api is None: api = init_alpaca_api()
+    try:
+        orders = api.list_orders(status="all", limit=limit, nested=True)
+        result = []
+        for o in orders:
+            result.append({
+                "id": o.id,
+                "ticker": o.symbol,
+                "qty": int(o.qty),
+                "filled_qty": int(o.filled_qty),
+                "side": o.side.upper(),
+                "type": o.type,
+                "status": o.status.upper(),
+                "created_at": o.created_at.isoformat() if hasattr(o.created_at, 'isoformat') else str(o.created_at),
+                "filled_at": o.filled_at.isoformat() if o.filled_at and hasattr(o.filled_at, 'isoformat') else str(o.filled_at),
+                "limit_price": float(o.limit_price) if o.limit_price else None,
+                "filled_avg_price": float(o.filled_avg_price) if o.filled_avg_price else None,
+            })
+        return result
+    except Exception as e:
+        log.error(f"❌ Failed to list orders: {e}")
+        return []
+
 
 
 def get_daily_loss() -> float:
@@ -420,6 +439,29 @@ def place_order(
     except Exception as e:
         log.error(f"❌ Order placement failed: {e}")
         return None
+
+
+def direct_place_order(ticker: str, qty: int, side: str, order_type: str = "market") -> Optional[str]:
+    """
+    Simplified order placement (bypasses signal-based ATR sizing).
+    Returns order ID.
+    """
+    global api
+    if api is None: api = init_alpaca_api()
+    try:
+        log.info(f"🚀 Direct order: {side.upper()} {qty} {ticker} @ {order_type}")
+        order = api.submit_order(
+            symbol=ticker,
+            qty=qty,
+            side=side.lower(),
+            type=order_type,
+            time_in_force="day"
+        )
+        return order.id
+    except Exception as e:
+        log.error(f"❌ Direct order failed: {e}")
+        return None
+
 
 
 # ─────────────────────────────────────────────

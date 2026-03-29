@@ -554,3 +554,271 @@
 2026-03-29 12:10:23  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
 2026-03-29 12:10:28  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
 2026-03-29 12:10:28  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 12:36:01  [MODULE-1]  INFO  ========================================================
+2026-03-29 12:36:01  [MODULE-1]  INFO    🎭 MIRAI ARCSPHERE · Orchestrator
+2026-03-29 12:36:01  [MODULE-1]  INFO  ========================================================
+2026-03-29 12:36:01  [MODULE-1]  INFO    Min Signal Confidence: 60%
+2026-03-29 12:36:01  [MODULE-1]  INFO    Signal Check Interval: 30s
+2026-03-29 12:36:01  [MODULE-1]  INFO    Position Update Interval: 10s
+2026-03-29 12:36:01  [MODULE-1]  INFO  ========================================================
+2026-03-29 12:36:01  [MODULE-1]  INFO  🔌 Starting signal monitor thread...
+2026-03-29 12:36:01  [MODULE-1]  INFO  🔌 Starting position monitor thread...
+2026-03-29 12:36:01  [MODULE-1]  INFO  ✅ Orchestrator started
+2026-03-29 12:36:01  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 1
+2026-03-29 12:36:01  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 2
+2026-03-29 12:36:01  [MODULE-1]  INFO  [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.104:5000
+2026-03-29 12:36:01  [MODULE-1]  INFO  [33mPress CTRL+C to quit[0m
+2026-03-29 12:36:01  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:36:01] "GET /api/stream HTTP/1.1" 200 -
+2026-03-29 12:36:01  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:36:01] "GET /api/stream HTTP/1.1" 200 -
+2026-03-29 12:36:01  [MODULE-1]  INFO  ✅ Alpaca API initialized (paper trading)
+2026-03-29 12:36:02  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:02  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:36:13  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:13  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:36:23  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:23  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:36:34  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:34  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:36:44  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:44  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:36:55  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:36:55  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:05  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:05  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:16  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:16  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:26  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:26  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:37  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:37  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:47  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:47  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:51  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:37:51] "GET /api/market-data HTTP/1.1" 200 -
+2026-03-29 12:37:53  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:37:53] "GET /api/signals HTTP/1.1" 200 -
+2026-03-29 12:37:55  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:55  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:37:55] "GET /api/positions HTTP/1.1" 200 -
+2026-03-29 12:37:58  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:58  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:58  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:37:59  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:37:59  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:37:59] "GET /api/portfolio HTTP/1.1" 200 -
+2026-03-29 12:38:02  [MODULE-1]  WARNING  Could not fetch market schedule from Alpaca: 401 Client Error: Unauthorized for url: https://paper-api.alpaca.markets/v2/clock
+2026-03-29 12:38:03  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:38:03  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:38:03] "GET /api/market-status HTTP/1.1" 200 -
+2026-03-29 12:38:05  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:38:05] "GET /api/tax-log HTTP/1.1" 200 -
+2026-03-29 12:38:07  [MODULE-1]  INFO  🌸 Starting data cycle for: SPY, QQQ, VTI
+2026-03-29 12:38:07  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-29 12:38:07  [MODULE-1]  INFO  🔄 Fetching dual-source data for SPY...
+2026-03-29 12:38:07  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for SPY (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:08  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for SPY: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/SPY/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A07.528191-04%3A00&end=2026-03-28T22%3A08%3A07.528191-04%3A00
+2026-03-29 12:38:08  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for SPY...
+2026-03-29 12:38:08  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:38:08  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:38:09  [MODULE-1]  INFO  ✅ yfinance: SPY → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:09  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for SPY
+2026-03-29 12:38:09  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:09  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $634.09 | RSI: 28.51 | Signal: BEARISH
+2026-03-29 12:38:10  [MODULE-1]  INFO  🔄 Running data pipeline for QQQ
+2026-03-29 12:38:10  [MODULE-1]  INFO  🔄 Fetching dual-source data for QQQ...
+2026-03-29 12:38:10  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for QQQ (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:10  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for QQQ: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/QQQ/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A10.116440-04%3A00&end=2026-03-28T22%3A08%3A10.116440-04%3A00
+2026-03-29 12:38:10  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for QQQ...
+2026-03-29 12:38:11  [MODULE-1]  INFO  ✅ yfinance: QQQ → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:11  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for QQQ
+2026-03-29 12:38:11  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:11  [MODULE-1]  INFO  ✅ QQQ pipeline complete → Price: $562.58 | RSI: 29.92 | Signal: BEARISH
+2026-03-29 12:38:11  [MODULE-1]  INFO  🔄 Running data pipeline for VTI
+2026-03-29 12:38:11  [MODULE-1]  INFO  🔄 Fetching dual-source data for VTI...
+2026-03-29 12:38:11  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for VTI (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:12  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for VTI: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/VTI/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A11.878709-04%3A00&end=2026-03-28T22%3A08%3A11.878709-04%3A00
+2026-03-29 12:38:12  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for VTI...
+2026-03-29 12:38:13  [MODULE-1]  INFO  ✅ yfinance: VTI → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:13  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for VTI
+2026-03-29 12:38:13  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:13  [MODULE-1]  INFO  ✅ VTI pipeline complete → Price: $313.09 | RSI: 28.97 | Signal: BEARISH
+2026-03-29 12:38:14  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:38:14  [MODULE-1]  INFO  💾 Snapshot saved → E:\Projects Manu\Stock Analyzer\data_snapshots\latest_data.json
+2026-03-29 12:38:14  [MODULE-1]  INFO  ✅ Data cycle complete for 3 ETFs
+2026-03-29 12:38:14  [MODULE-1]  INFO  🧠 Starting AI analysis for 3 tickers via Groq...
+2026-03-29 12:38:14  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for SPY
+2026-03-29 12:38:14  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:14  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for QQQ
+2026-03-29 12:38:14  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:14  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for VTI
+2026-03-29 12:38:14  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:14  [MODULE-1]  INFO  💾 Signals cached → E:\Projects Manu\Stock Analyzer\data_snapshots\signals_cache.json
+2026-03-29 12:38:14  [MODULE-1]  INFO  ✅ AI analysis complete for 3 tickers | Total: 0ms
+2026-03-29 12:38:15  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:38:15  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:38:15] "POST /api/refresh HTTP/1.1" 200 -
+2026-03-29 12:38:19  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:38:19  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:38:29  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:38:29  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:38:38  [MODULE-1]  INFO  🌸 Starting data cycle for: SPY, QQQ, VTI
+2026-03-29 12:38:38  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-29 12:38:38  [MODULE-1]  INFO  🔄 Fetching dual-source data for SPY...
+2026-03-29 12:38:38  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for SPY (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:39  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for SPY: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/SPY/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A38.688381-04%3A00&end=2026-03-28T22%3A08%3A38.688381-04%3A00
+2026-03-29 12:38:39  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for SPY...
+2026-03-29 12:38:40  [MODULE-1]  INFO  ✅ yfinance: SPY → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:40  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for SPY
+2026-03-29 12:38:40  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:40  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $634.09 | RSI: 28.51 | Signal: BEARISH
+2026-03-29 12:38:40  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:38:40  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:38:40  [MODULE-1]  INFO  🔄 Running data pipeline for QQQ
+2026-03-29 12:38:40  [MODULE-1]  INFO  🔄 Fetching dual-source data for QQQ...
+2026-03-29 12:38:40  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for QQQ (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:41  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for QQQ: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/QQQ/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A40.672648-04%3A00&end=2026-03-28T22%3A08%3A40.672648-04%3A00
+2026-03-29 12:38:41  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for QQQ...
+2026-03-29 12:38:41  [MODULE-1]  INFO  ✅ yfinance: QQQ → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:41  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for QQQ
+2026-03-29 12:38:41  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:41  [MODULE-1]  INFO  ✅ QQQ pipeline complete → Price: $562.58 | RSI: 29.92 | Signal: BEARISH
+2026-03-29 12:38:42  [MODULE-1]  INFO  🔄 Running data pipeline for VTI
+2026-03-29 12:38:42  [MODULE-1]  INFO  🔄 Fetching dual-source data for VTI...
+2026-03-29 12:38:42  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for VTI (2025-12-28 → 2026-03-28)
+2026-03-29 12:38:42  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for VTI: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/VTI/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A08%3A42.188089-04%3A00&end=2026-03-28T22%3A08%3A42.188089-04%3A00
+2026-03-29 12:38:42  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for VTI...
+2026-03-29 12:38:43  [MODULE-1]  INFO  ✅ yfinance: VTI → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:38:43  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for VTI
+2026-03-29 12:38:43  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:38:43  [MODULE-1]  INFO  ✅ VTI pipeline complete → Price: $313.09 | RSI: 28.97 | Signal: BEARISH
+2026-03-29 12:38:44  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:38:44  [MODULE-1]  INFO  💾 Snapshot saved → E:\Projects Manu\Stock Analyzer\data_snapshots\latest_data.json
+2026-03-29 12:38:44  [MODULE-1]  INFO  ✅ Data cycle complete for 3 ETFs
+2026-03-29 12:38:44  [MODULE-1]  INFO  🧠 Starting AI analysis for 3 tickers via Groq...
+2026-03-29 12:38:44  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for SPY
+2026-03-29 12:38:44  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:44  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for QQQ
+2026-03-29 12:38:44  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:44  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for VTI
+2026-03-29 12:38:44  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:38:44  [MODULE-1]  INFO  💾 Signals cached → E:\Projects Manu\Stock Analyzer\data_snapshots\signals_cache.json
+2026-03-29 12:38:44  [MODULE-1]  INFO  ✅ AI analysis complete for 3 tickers | Total: 0ms
+2026-03-29 12:38:45  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:38:45  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:38:45] "POST /api/refresh HTTP/1.1" 200 -
+2026-03-29 12:38:50  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:38:50  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:01  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:01  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:11  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:11  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:22  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:22  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:32  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:32  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:43  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:43  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:39:53  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:39:53  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:04  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:04  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:14  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:14  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:25  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:25  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:35  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:35  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:46  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:46  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:40:56  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:40:56  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:02  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:41:07  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:07  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:16  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:41:16] "[33mPOST /api/auto-trade/enable HTTP/1.1[0m" 404 -
+2026-03-29 12:41:17  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:17  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:28  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:28  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:38  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:38  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:45  [MODULE-1]  INFO  🌸 Starting data cycle for: SPY, QQQ, VTI
+2026-03-29 12:41:45  [MODULE-1]  INFO  🔄 Running data pipeline for SPY
+2026-03-29 12:41:45  [MODULE-1]  INFO  🔄 Fetching dual-source data for SPY...
+2026-03-29 12:41:45  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for SPY (2025-12-28 → 2026-03-28)
+2026-03-29 12:41:45  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for SPY: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/SPY/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A11%3A45.164509-04%3A00&end=2026-03-28T22%3A11%3A45.164509-04%3A00
+2026-03-29 12:41:45  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for SPY...
+2026-03-29 12:41:47  [MODULE-1]  INFO  ✅ yfinance: SPY → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:41:47  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for SPY
+2026-03-29 12:41:47  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:41:47  [MODULE-1]  INFO  ✅ SPY pipeline complete → Price: $634.09 | RSI: 28.51 | Signal: BEARISH
+2026-03-29 12:41:47  [MODULE-1]  INFO  🔄 Running data pipeline for QQQ
+2026-03-29 12:41:47  [MODULE-1]  INFO  🔄 Fetching dual-source data for QQQ...
+2026-03-29 12:41:47  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for QQQ (2025-12-28 → 2026-03-28)
+2026-03-29 12:41:48  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for QQQ: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/QQQ/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A11%3A47.932997-04%3A00&end=2026-03-28T22%3A11%3A47.932997-04%3A00
+2026-03-29 12:41:48  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for QQQ...
+2026-03-29 12:41:48  [MODULE-1]  INFO  ✅ yfinance: QQQ → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:41:48  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for QQQ
+2026-03-29 12:41:48  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:41:48  [MODULE-1]  INFO  ✅ QQQ pipeline complete → Price: $562.58 | RSI: 29.92 | Signal: BEARISH
+2026-03-29 12:41:49  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:49  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:41:49  [MODULE-1]  INFO  🔄 Running data pipeline for VTI
+2026-03-29 12:41:49  [MODULE-1]  INFO  🔄 Fetching dual-source data for VTI...
+2026-03-29 12:41:49  [MODULE-1]  INFO  📥 Fetching 90d Alpaca bars for VTI (2025-12-28 → 2026-03-28)
+2026-03-29 12:41:50  [MODULE-1]  WARNING  ⚠ Alpaca Historical API unavailable for VTI: 401 Client Error: Unauthorized for url: https://data.alpaca.markets/v2/stocks/VTI/bars?timeframe=day&adjustment=raw&start=2025-12-28T22%3A11%3A49.463662-04%3A00&end=2026-03-28T22%3A11%3A49.463662-04%3A00
+2026-03-29 12:41:50  [MODULE-1]  INFO  📥 Fetching 90d yfinance history for VTI...
+2026-03-29 12:41:50  [MODULE-1]  INFO  ✅ yfinance: VTI → 90 bars (2025-11-17 → 2026-03-27)
+2026-03-29 12:41:50  [MODULE-1]  INFO  ⚠ Alpaca unavailable, falling back to yfinance for VTI
+2026-03-29 12:41:50  [MODULE-1]  INFO  📊 Indicators calculated: 19 indicators added
+2026-03-29 12:41:50  [MODULE-1]  INFO  ✅ VTI pipeline complete → Price: $313.09 | RSI: 28.97 | Signal: BEARISH
+2026-03-29 12:41:51  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:41:51  [MODULE-1]  INFO  💾 Snapshot saved → E:\Projects Manu\Stock Analyzer\data_snapshots\latest_data.json
+2026-03-29 12:41:51  [MODULE-1]  INFO  ✅ Data cycle complete for 3 ETFs
+2026-03-29 12:41:51  [MODULE-1]  INFO  🧠 Starting AI analysis for 3 tickers via Groq...
+2026-03-29 12:41:51  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for SPY
+2026-03-29 12:41:51  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:41:51  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for QQQ
+2026-03-29 12:41:51  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:41:51  [MODULE-1]  WARNING  ⚠ No GROQ_API_KEY set — returning technical-only signal for VTI
+2026-03-29 12:41:51  [MODULE-1]  INFO    Get your free key at: https://console.groq.com/keys
+2026-03-29 12:41:51  [MODULE-1]  INFO  💾 Signals cached → E:\Projects Manu\Stock Analyzer\data_snapshots\signals_cache.json
+2026-03-29 12:41:51  [MODULE-1]  INFO  ✅ AI analysis complete for 3 tickers | Total: 0ms
+2026-03-29 12:41:52  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 12:41:52  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 12:41:52] "POST /api/refresh HTTP/1.1" 200 -
+2026-03-29 12:41:59  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:41:59  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:42:10  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:42:10  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:42:20  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:42:20  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:42:31  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:42:31  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:42:41  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:42:41  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:42:52  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:42:52  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:02  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:02  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:13  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:13  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:23  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:23  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:34  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:34  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:44  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:44  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:43:55  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:43:55  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:05  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:05  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:16  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:16  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:26  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:26  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:37  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:37  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:47  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:47  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:44:58  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:44:58  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:45:08  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:45:08  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:45:19  [MODULE-1]  INFO  📊 0 open positions
+2026-03-29 12:45:19  [MODULE-1]  ERROR  ❌ Failed to get account info: 'Account' object has no attribute 'unrealized_pl'
+2026-03-29 12:45:29  [MODULE-1]  INFO  📊 0 open positions

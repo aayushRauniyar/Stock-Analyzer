@@ -41,9 +41,11 @@ from ta.volatility import BollingerBands, AverageTrueRange
 # ─────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────
+from config import get_watchlist, save_watchlist
 
-# ETFs to watch — easily add more here
-WATCHLIST = ["SPY", "QQQ", "VTI"]
+# Fetch initial favorites from disk
+WATCHLIST = get_watchlist()
+
 
 # How often to fetch data during market hours (minutes)
 FETCH_INTERVAL_MINUTES = 60
@@ -82,6 +84,20 @@ last_analysis_prices = {ticker: None for ticker in WATCHLIST}
 # Thread-safe queue for broadcasting price updates to server.py (SSE)
 sse_event_queue = queue.Queue()
 sse_lock = threading.Lock()
+
+def update_global_watchlist():
+    """Update the global WATCHLIST variable from disk and sync state."""
+    global WATCHLIST, last_prices, last_analysis_prices
+    new_watchlist = get_watchlist()
+    with sse_lock:
+        # Identify added tickers to initialize state
+        for t in new_watchlist:
+            if t not in last_prices:
+                last_prices[t] = None
+                last_analysis_prices[t] = None
+        WATCHLIST = new_watchlist
+    log.info(f"🔄 Global watchlist updated: {', '.join(WATCHLIST)}")
+
 
 # WebSocket connection state
 websocket_connection = None

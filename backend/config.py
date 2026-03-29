@@ -24,9 +24,10 @@ from datetime import datetime, time
 # ─────────────────────────────────────────────
 
 # Paper trading API keys (set via environment variables)
-ALPACA_API_KEY = os.getenv("ALPACA_API_KEY", "YOUR_ALPACA_API_KEY")
-ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "YOUR_ALPACA_SECRET_KEY")
-ALPACA_BASE_URL = "https://paper-api.alpaca.markets"
+ALPACA_API_KEY    = os.getenv("ALPACA_API_KEY",    "PKK4HFWNTHQ6EVWNKEAEFSST5A")
+ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", "Adrwo9qSgrzuHaPLyjVD551jRz84nRyZXUmQcQkA1sFw")
+ALPACA_BASE_URL   = os.getenv("ALPACA_BASE_URL",   "https://paper-api.alpaca.markets")
+ALPACA_API_URL    = "https://paper-api.alpaca.markets/v2"
 
 # ─────────────────────────────────────────────
 # RISK MANAGEMENT CONFIGURATION
@@ -147,6 +148,39 @@ PERCENT_DECIMAL_PLACES = 2
 
 # Timezone for logging timestamps
 TIMEZONE = "Australia/Adelaide"
+
+
+# ─────────────────────────────────────────────
+# WATCHLIST PERSISTENCE
+# ─────────────────────────────────────────────
+
+# Path to persistent favorite stocks
+WATCHLIST_FILE = os.path.join(BASE_DIR, "backend", "data_snapshots", "watchlist.json")
+
+def get_watchlist() -> list:
+    """Read the favorites watchlist from disk."""
+    try:
+        import json
+        if os.path.exists(WATCHLIST_FILE):
+            with open(WATCHLIST_FILE, "r") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return ["SPY", "QQQ", "VTI"]  # Default favorites
+
+
+def save_watchlist(watchlist: list) -> None:
+    """Save the favorites watchlist to disk."""
+    try:
+        import json
+        os.makedirs(os.path.dirname(WATCHLIST_FILE), exist_ok=True)
+        # Unique list of uppercase tickers
+        unique_list = sorted(list(set([str(t).upper().strip() for t in watchlist])))
+        with open(WATCHLIST_FILE, "w") as f:
+            json.dump(unique_list, f)
+    except Exception:
+        pass
+
 
 
 # ─────────────────────────────────────────────
