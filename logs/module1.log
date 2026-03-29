@@ -103,3 +103,310 @@
 2026-03-12 16:37:10  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
 2026-03-12 16:42:10  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
 2026-03-12 16:47:11  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 11:38:37  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:38:37  [MODULE-1]  INFO    🎭 MIRAI ARCSPHERE · Orchestrator
+2026-03-29 11:38:37  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:38:37  [MODULE-1]  INFO    Min Signal Confidence: 60%
+2026-03-29 11:38:37  [MODULE-1]  INFO    Signal Check Interval: 30s
+2026-03-29 11:38:37  [MODULE-1]  INFO    Position Update Interval: 10s
+2026-03-29 11:38:37  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:38:37  [MODULE-1]  INFO  🔌 Starting signal monitor thread...
+2026-03-29 11:38:37  [MODULE-1]  INFO  🔌 Starting position monitor thread...
+2026-03-29 11:38:37  [MODULE-1]  INFO  ✅ Orchestrator started
+2026-03-29 11:38:37  [MODULE-1]  INFO  [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.104:5000
+2026-03-29 11:38:37  [MODULE-1]  INFO  [33mPress CTRL+C to quit[0m
+2026-03-29 11:38:42  [MODULE-1]  INFO  ✅ Alpaca API initialized (paper trading)
+2026-03-29 11:38:42  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:38:43  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:38:53  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:38:53  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:03  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:04  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:14  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:14  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:24  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:25  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:35  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:35  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:45  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:46  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:39:56  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:39:56  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:06  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:07  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:17  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:17  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:27  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:28  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:38  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:38  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:49  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:49  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:40:59  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:40:59  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:41:10  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:41:10  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:41:20  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:41:20  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:41:31  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:41:31  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:41:41  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:41:41  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:41:52  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:41:52  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:02  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:02  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:13  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:13  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:23  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:23  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:34  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:34  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:44  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:44  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:42:55  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:42:55  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:05  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:05  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:15  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:16  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:26  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:26  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:36  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:37  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:38  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 11:43:47  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:47  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:43:58  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:43:58  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:44:08  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:44:08  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:44:18  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:44:19  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:44:29  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:44:29  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:44:39  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:44:40  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:44:50  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:44:50  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:00  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:01  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:11  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:11  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:21  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:22  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:32  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:32  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:42  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:43  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:45:53  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:45:53  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:03  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:04  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:14  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:14  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:24  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:25  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:35  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:35  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:45  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:46  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:46:56  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:46:56  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:06  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:07  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:17  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:17  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:27  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:28  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:38  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:38  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:48  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:49  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:47:59  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:47:59  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:48:09  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:48:10  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:48:20  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:48:20  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:48:30  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:48:31  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:48:39  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 11:48:41  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:48:41  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:48:51  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:48:52  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:02  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:02  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:13  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:13  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:23  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:23  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:33  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:34  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:44  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:44  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:49:54  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:49:55  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:05  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:05  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:15  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:16  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:26  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:26  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:36  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:37  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:47  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:47  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:50:57  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:50:58  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:51:08  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:51:08  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:51:18  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:51:19  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:51:29  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:51:29  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:51:39  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:51:40  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:51:50  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:51:50  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:01  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:01  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:11  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:11  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:22  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:22  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:32  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:32  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:43  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:43  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:52:53  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:52:53  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:03  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:04  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:14  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:14  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:24  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:25  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:35  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:35  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:40  [MODULE-1]  INFO  Market status (fallback time check): 🔴 CLOSED
+2026-03-29 11:53:46  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:46  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:53:56  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:53:56  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:07  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:54:07  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:17  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:54:17  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:28  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:54:28  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:45  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:54:45  [MODULE-1]  INFO    🎭 MIRAI ARCSPHERE · Orchestrator
+2026-03-29 11:54:45  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:54:45  [MODULE-1]  INFO    Min Signal Confidence: 60%
+2026-03-29 11:54:45  [MODULE-1]  INFO    Signal Check Interval: 30s
+2026-03-29 11:54:45  [MODULE-1]  INFO    Position Update Interval: 10s
+2026-03-29 11:54:45  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:54:45  [MODULE-1]  INFO  🔌 Starting signal monitor thread...
+2026-03-29 11:54:45  [MODULE-1]  INFO  🔌 Starting position monitor thread...
+2026-03-29 11:54:45  [MODULE-1]  INFO  ✅ Orchestrator started
+2026-03-29 11:54:45  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 1
+2026-03-29 11:54:45  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 2
+2026-03-29 11:54:45  [MODULE-1]  INFO  [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.104:5000
+2026-03-29 11:54:45  [MODULE-1]  INFO  [33mPress CTRL+C to quit[0m
+2026-03-29 11:54:46  [MODULE-1]  INFO  ✅ Alpaca API initialized (paper trading)
+2026-03-29 11:54:47  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:54:47  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:57  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:54:57  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:54:58  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:54:58] "[33mGET / HTTP/1.1[0m" 404 -
+2026-03-29 11:55:00  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-29 11:55:08  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:55:08  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:55:18  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:55:18  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:55:22  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:22] "GET /api/market-data?t=1774747522537 HTTP/1.1" 200 -
+2026-03-29 11:55:22  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:22] "GET /api/market-data?t=1774747522542 HTTP/1.1" 200 -
+2026-03-29 11:55:22  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:22] "GET /api/stream HTTP/1.1" 200 -
+2026-03-29 11:55:22  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:22] "GET /api/signals HTTP/1.1" 200 -
+2026-03-29 11:55:22  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:22] "GET /api/signals HTTP/1.1" 200 -
+2026-03-29 11:55:29  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:55:29  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:55:39  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:55:39  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:55:50  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:55:50  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:55:57  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:57] "OPTIONS /api/trade HTTP/1.1" 200 -
+2026-03-29 11:55:57  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:57] "[35m[1mPOST /api/trade HTTP/1.1[0m" 500 -
+2026-03-29 11:55:59  [MODULE-1]  INFO  127.0.0.1 - - [29/Mar/2026 11:55:59] "[35m[1mPOST /api/trade HTTP/1.1[0m" 500 -
+2026-03-29 11:56:00  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:00  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:56:11  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:11  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:56:21  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:22  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:56:32  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:32  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:56:42  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:43  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:56:53  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:56:53  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:03  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:03  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:14  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:14  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:24  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:25  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:35  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:35  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:45  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:46  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:57:56  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:57:56  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:58:11  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:58:11  [MODULE-1]  INFO    🎭 MIRAI ARCSPHERE · Orchestrator
+2026-03-29 11:58:11  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:58:11  [MODULE-1]  INFO    Min Signal Confidence: 60%
+2026-03-29 11:58:11  [MODULE-1]  INFO    Signal Check Interval: 30s
+2026-03-29 11:58:11  [MODULE-1]  INFO    Position Update Interval: 10s
+2026-03-29 11:58:11  [MODULE-1]  INFO  ========================================================
+2026-03-29 11:58:11  [MODULE-1]  INFO  🔌 Starting signal monitor thread...
+2026-03-29 11:58:11  [MODULE-1]  INFO  🔌 Starting position monitor thread...
+2026-03-29 11:58:11  [MODULE-1]  INFO  ✅ Orchestrator started
+2026-03-29 11:58:11  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 1
+2026-03-29 11:58:11  [MODULE-1]  WARNING  python-dotenv could not parse statement starting at line 2
+2026-03-29 11:58:11  [MODULE-1]  INFO  [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.104:5000
+2026-03-29 11:58:11  [MODULE-1]  INFO  [33mPress CTRL+C to quit[0m
+2026-03-29 11:58:11  [MODULE-1]  INFO  ✅ Alpaca API initialized (paper trading)
+2026-03-29 11:58:12  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:58:13  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:58:23  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:58:23  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:58:33  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:58:34  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:58:44  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:58:44  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:58:54  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:58:55  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:05  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:05  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:15  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:16  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:26  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:26  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:37  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:37  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:47  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:47  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.
+2026-03-29 11:59:58  [MODULE-1]  ERROR  ❌ Failed to list positions: unauthorized.
+2026-03-29 11:59:58  [MODULE-1]  ERROR  ❌ Failed to get account info: unauthorized.

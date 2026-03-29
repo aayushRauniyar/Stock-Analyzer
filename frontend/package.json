@@ -4,6 +4,9 @@
   "description": "<p align=\"center\">   <img src=\"https://raw.githubusercontent.com/aayushRauniyar/Stock-Analyzer/main/assets/banner.png\" alt=\"Mirai ArcSphere Banner\" width=\"100%\"> </p>",
   "main": "vite.config.js",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,10 +21,10 @@
   },
   "homepage": "https://github.com/aayushRauniyar/Stock-Analyzer#readme",
   "dependencies": {
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react": "^6.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "vite": "^4.5.14"
+    "vite": "^8.0.3"
   },
   "type": "module"
 }
