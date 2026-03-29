@@ -18,6 +18,14 @@ PARAMETERS:
 
 import os
 from datetime import datetime, time
+# Load .env from backend directory so environment variables (API keys) are available
+try:
+    from dotenv import load_dotenv
+    dotenv_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+    if os.path.exists(dotenv_path):
+        load_dotenv(dotenv_path)
+except Exception:
+    pass
 
 # ─────────────────────────────────────────────
 # ALPACA PAPER TRADING CONFIGURATION
